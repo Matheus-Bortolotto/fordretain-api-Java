@@ -78,4 +78,14 @@ public class GlobalExceptionHandler {
         log.error("Erro inesperado: ", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<ErrorResponse> handleDatabaseException(DatabaseException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .status(500)
+                .erro("Erro de banco de dados")
+                .mensagem(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(500).body(error);
+    }
 }
