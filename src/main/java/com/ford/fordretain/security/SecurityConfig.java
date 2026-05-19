@@ -32,15 +32,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Libera OPTIONS para preflight do browser
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Endpoints públicos
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                        // Dashboard: qualquer usuário autenticado
-                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard").authenticated()
-                        // Leads: apenas ADMIN e ANALISTA
-                        .requestMatchers(HttpMethod.GET, "/api/v1/leads").hasAnyRole("ADMIN", "ANALISTA")
-                        // Predict: apenas ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/v1/predict").hasRole("ADMIN")
                         // Qualquer outra rota: autenticado
                         .anyRequest().authenticated()
                 )
@@ -54,8 +50,10 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(false);
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
