@@ -37,7 +37,11 @@ public class SecurityConfig {
                         // Endpoints públicos
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                        // Qualquer outra rota: autenticado
+                        // RBAC por perfil
+                        .requestMatchers(HttpMethod.POST, "/api/v1/predict").hasAnyRole("ADMIN", "GERENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard").hasAnyRole("ADMIN", "GERENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leads").hasAnyRole("ADMIN", "GERENTE", "ANALISTA")
+                        // Qualquer outra rota autenticada
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
