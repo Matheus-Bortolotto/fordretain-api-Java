@@ -24,11 +24,15 @@ public class AuthController {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    // Usuários mockados — em produção viriam do banco
+    // Usuários mockados — em produção viriam do banco (tabela usuarios)
+    // Hash BCrypt real da senha "ford2026", gerado com BCryptPasswordEncoder
+    private static final String SENHA_HASH =
+            "$2b$10$UhY5a/ojCNHkvkkdxdDCOOLnBWIzjYfSl8sLRVUa1/l7wfDJ0eVIW";
+
     private static final Map<String, String[]> USUARIOS = Map.of(
-            "admin@ford.com",    new String[]{ "$2a$10$7QfkPNMBVpBmYlHkL8B0FOx7F5QZq5Qx5Qx5Qx5Qx5Qx5Qx5Qx5Q", "ADMIN" },
-            "analista@ford.com", new String[]{ "$2a$10$7QfkPNMBVpBmYlHkL8B0FOx7F5QZq5Qx5Qx5Qx5Qx5Qx5Qx5Qx5Q", "ANALISTA" },
-            "gerente@ford.com",  new String[]{ "$2a$10$7QfkPNMBVpBmYlHkL8B0FOx7F5QZq5Qx5Qx5Qx5Qx5Qx5Qx5Qx5Q", "GERENTE" }
+            "admin@ford.com",    new String[]{ SENHA_HASH, "ADMIN" },
+            "analista@ford.com", new String[]{ SENHA_HASH, "ANALISTA" },
+            "gerente@ford.com",  new String[]{ SENHA_HASH, "GERENTE" }
     );
 
     @PostMapping("/login")
@@ -46,8 +50,9 @@ public class AuthController {
             );
         }
 
-        // Para simplificar o mock: aceita senha "ford2026" para todos
-        if (!"ford2026".equals(request.getSenha())) {
+        // Verificação real do hash — nunca comparar senha em texto puro
+        String hashArmazenado = userData[0];
+        if (!passwordEncoder.matches(request.getSenha(), hashArmazenado)) {
             log.warn("[SECURITY] Senha incorreta para: {}", request.getEmail());
             return ResponseEntity.status(401).body(
                     Map.of("erro", "Credenciais inválidas")
