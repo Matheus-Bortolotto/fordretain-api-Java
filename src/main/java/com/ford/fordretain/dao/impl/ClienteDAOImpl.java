@@ -4,6 +4,7 @@ import com.ford.fordretain.config.OracleConnectionFactory;
 import com.ford.fordretain.dao.ClienteDAO;
 import com.ford.fordretain.exception.DatabaseException;
 import com.ford.fordretain.model.Cliente;
+import com.ford.fordretain.security.CryptoUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class ClienteDAOImpl implements ClienteDAO {
 
     private final OracleConnectionFactory connectionFactory;
+    private final CryptoUtils cryptoUtils;
 
     @Override
     public Cliente save(Cliente cliente) {
@@ -34,7 +36,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
             ps.setString(1, cliente.getNome());
             ps.setString(2, cliente.getEmail());
-            ps.setString(3, cliente.getTelefone());
+            ps.setString(3, cryptoUtils.encrypt(cliente.getTelefone()));
             ps.setString(4, cliente.getRegiao());
             ps.setInt(5, cliente.getIdade());
             ps.setString(6, cliente.getCanalCompra());
@@ -153,7 +155,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             LocalDateTime agora = LocalDateTime.now();
 
             ps.setString(1, cliente.getNome());
-            ps.setString(2, cliente.getTelefone());
+            ps.setString(2, cryptoUtils.encrypt(cliente.getTelefone()));
             ps.setString(3, cliente.getRegiao());
             ps.setInt(4, cliente.getIdade());
             ps.setString(5, cliente.getCanalCompra());
@@ -213,7 +215,7 @@ public class ClienteDAOImpl implements ClienteDAO {
                 .id(rs.getLong("id"))
                 .nome(rs.getString("nome"))
                 .email(rs.getString("email"))
-                .telefone(rs.getString("telefone"))
+                .telefone(cryptoUtils.decrypt(rs.getString("telefone")))
                 .regiao(rs.getString("regiao"))
                 .idade(rs.getInt("idade"))
                 .canalCompra(rs.getString("canal_compra"))

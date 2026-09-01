@@ -42,6 +42,10 @@ public class SecurityConfig {
                         // Sem isso, um 403/500 legítimo é reprocessado pela cadeia de segurança
                         // como uma segunda requisição anônima e acaba virando 401 por engano.
                         .requestMatchers("/error").permitAll()
+                        // Health check público — necessário para orquestradores/monitoramento
+                        // (K8s, load balancer) verificarem se a aplicação está no ar.
+                        .requestMatchers("/actuator/health/**").permitAll()
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
                         // Endpoints públicos
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
