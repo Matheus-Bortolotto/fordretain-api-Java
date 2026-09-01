@@ -1,15 +1,18 @@
 package com.ford.fordretain.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -31,9 +34,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint()))
                 .authorizeHttpRequests(auth -> auth
                         // Libera OPTIONS para preflight do browser
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Libera o forward interno do Spring Boot para montar respostas de erro.
+                        // Sem isso, um 403/500 legítimo é reprocessado pela cadeia de segurança
+                        // como uma segunda requisição anônima e acaba virando 401 por engano.
+                        .requestMatchers("/error").permitAll()
                         // Endpoints públicos
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
@@ -41,12 +49,42 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/predict").hasAnyRole("ADMIN", "GERENTE")
                         .requestMatchers(HttpMethod.GET, "/api/v1/dashboard").hasAnyRole("ADMIN", "GERENTE")
                         .requestMatchers(HttpMethod.GET, "/api/v1/leads").hasAnyRole("ADMIN", "GERENTE", "ANALISTA")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/clientes/**").hasAnyRole("ADMIN", "GERENTE", "ANALISTA")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/clientes/**").hasAnyRole("ADMIN", "GERENTE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/clientes/**").hasRole("ADMIN")
                         // Qualquer outra rota autenticada
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public FilterRegistrationBean<JwtAuthFilter> jwtAuthFilterRegistration(JwtAuthFilter filter) {
+        // JwtAuthFilter é @Component, então o Spring Boot o registraria automaticamente
+        // como um filtro Servlet genérico (rodando em TODA requisição, fora de ordem),
+        // além de já estar explicitamente na cadeia do Spring Security via addFilterBefore
+        // logo abaixo. Isso causava dupla execução do mesmo OncePerRequestFilter na mesma
+        // requisição, o que podia corromper o SecurityContext e gerar 401 em vez de 403
+        // para requisições com role incorreta. Desabilita o registro automático aqui.
+        FilterRegistrationBean<JwtAuthFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        // Sem isso, o Spring Security devolve 403 (Forbidden) por padrão para
+        // requisições SEM nenhum token. O correto é 401 (Unauthorized) — "eu não
+        // sei quem você é" — reservando o 403 para quando o token é válido mas
+        // a role não tem permissão (tratado no JwtAuthFilter/AuthorizationFilter).
+        return (request, response, authException) -> {
+            response.setStatus(401);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"erro\":\"Não autenticado — token ausente ou inválido\"}");
+        };
     }
 
     @Bean

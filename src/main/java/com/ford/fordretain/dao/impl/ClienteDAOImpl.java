@@ -111,6 +111,86 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     @Override
+    public Optional<Cliente> findById(Long id) {
+        String sql = """
+            SELECT id, nome, email, telefone, regiao, idade,
+                   canal_compra, forma_pagamento, modelo_veiculo,
+                   data_compra, historico_marca, criado_em, atualizado_em
+            FROM clientes
+            WHERE id = ?
+            """;
+
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapRow(rs));
+                }
+                return Optional.empty();
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Erro ao buscar cliente por ID", e);
+        }
+    }
+
+    @Override
+    public Cliente update(Cliente cliente) {
+        String sql = """
+            UPDATE clientes SET
+                nome = ?, telefone = ?, regiao = ?, idade = ?,
+                canal_compra = ?, forma_pagamento = ?, modelo_veiculo = ?,
+                data_compra = ?, historico_marca = ?, atualizado_em = ?
+            WHERE id = ?
+            """;
+
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            LocalDateTime agora = LocalDateTime.now();
+
+            ps.setString(1, cliente.getNome());
+            ps.setString(2, cliente.getTelefone());
+            ps.setString(3, cliente.getRegiao());
+            ps.setInt(4, cliente.getIdade());
+            ps.setString(5, cliente.getCanalCompra());
+            ps.setString(6, cliente.getFormaPagamento());
+            ps.setString(7, cliente.getModeloVeiculo());
+            ps.setDate(8, Date.valueOf(cliente.getDataCompra()));
+            ps.setString(9, cliente.getHistoricoMarca());
+            ps.setTimestamp(10, Timestamp.valueOf(agora));
+            ps.setLong(11, cliente.getId());
+
+            ps.executeUpdate();
+
+            cliente.setAtualizadoEm(agora);
+            return cliente;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Erro ao atualizar cliente", e);
+        }
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        String sql = "DELETE FROM clientes WHERE id = ?";
+
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            int linhas = ps.executeUpdate();
+            return linhas > 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Erro ao remover cliente", e);
+        }
+    }
+
+    @Override
     public long count() {
         String sql = "SELECT COUNT(1) FROM clientes";
 

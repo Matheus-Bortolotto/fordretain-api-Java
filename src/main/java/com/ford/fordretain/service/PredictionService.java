@@ -3,10 +3,13 @@ package com.ford.fordretain.service;
 import com.ford.fordretain.dao.ClienteDAO;
 import com.ford.fordretain.dao.PredicaoDAO;
 import com.ford.fordretain.dto.ClienteRequestDTO;
+import com.ford.fordretain.dto.ClienteResponseDTO;
+import com.ford.fordretain.dto.ClienteUpdateRequestDTO;
 import com.ford.fordretain.dto.DashboardDTO;
 import com.ford.fordretain.dto.LeadDTO;
 import com.ford.fordretain.dto.PredicaoResponseDTO;
 import com.ford.fordretain.exception.ClienteJaCadastradoException;
+import com.ford.fordretain.exception.ClienteNaoEncontradoException;
 import com.ford.fordretain.model.Cliente;
 import com.ford.fordretain.model.Predicao;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +74,66 @@ public class PredictionService {
                 .scoreRisco(scoreRisco)
                 .acaoSugerida(acao)
                 .dataPredicao(predicao.getDataPredicao())
+                .build();
+    }
+
+    // ============================================================
+    // GET /clientes/{id}
+    // ============================================================
+    public ClienteResponseDTO getClienteById(Long id) {
+        Cliente cliente = clienteDAO.findById(id)
+                .orElseThrow(() -> new ClienteNaoEncontradoException(id));
+        return toResponseDTO(cliente);
+    }
+
+    // ============================================================
+    // PUT /clientes/{id}
+    // ============================================================
+    public ClienteResponseDTO updateCliente(Long id, ClienteUpdateRequestDTO request) {
+        Cliente existente = clienteDAO.findById(id)
+                .orElseThrow(() -> new ClienteNaoEncontradoException(id));
+
+        existente.setNome(request.getNome());
+        existente.setTelefone(request.getTelefone());
+        existente.setRegiao(request.getRegiao());
+        existente.setIdade(request.getIdade());
+        existente.setCanalCompra(request.getCanalCompra());
+        existente.setFormaPagamento(request.getFormaPagamento());
+        existente.setModeloVeiculo(request.getModeloVeiculo());
+        existente.setDataCompra(request.getDataCompra());
+        existente.setHistoricoMarca(request.getHistoricoMarca());
+
+        Cliente atualizado = clienteDAO.update(existente);
+        log.info("Cliente atualizado: id={}", id);
+        return toResponseDTO(atualizado);
+    }
+
+    // ============================================================
+    // DELETE /clientes/{id}
+    // ============================================================
+    public void deleteCliente(Long id) {
+        if (clienteDAO.findById(id).isEmpty()) {
+            throw new ClienteNaoEncontradoException(id);
+        }
+        clienteDAO.deleteById(id);
+        log.info("Cliente removido: id={}", id);
+    }
+
+    private ClienteResponseDTO toResponseDTO(Cliente cliente) {
+        return ClienteResponseDTO.builder()
+                .id(cliente.getId())
+                .nome(cliente.getNome())
+                .email(cliente.getEmail())
+                .telefone(cliente.getTelefone())
+                .regiao(cliente.getRegiao())
+                .idade(cliente.getIdade())
+                .canalCompra(cliente.getCanalCompra())
+                .formaPagamento(cliente.getFormaPagamento())
+                .modeloVeiculo(cliente.getModeloVeiculo())
+                .dataCompra(cliente.getDataCompra())
+                .historicoMarca(cliente.getHistoricoMarca())
+                .criadoEm(cliente.getCriadoEm())
+                .atualizadoEm(cliente.getAtualizadoEm())
                 .build();
     }
 

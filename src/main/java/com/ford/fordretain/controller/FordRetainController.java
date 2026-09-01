@@ -1,6 +1,8 @@
 package com.ford.fordretain.controller;
 
 import com.ford.fordretain.dto.ClienteRequestDTO;
+import com.ford.fordretain.dto.ClienteResponseDTO;
+import com.ford.fordretain.dto.ClienteUpdateRequestDTO;
 import com.ford.fordretain.dto.DashboardDTO;
 import com.ford.fordretain.dto.LeadDTO;
 import com.ford.fordretain.dto.PredicaoResponseDTO;
@@ -34,8 +36,8 @@ public class FordRetainController {
     // ============================================================
     @PostMapping("/predict")
     @Operation(
-        summary = "Prever perfil de um novo cliente",
-        description = """
+            summary = "Prever perfil de um novo cliente",
+            description = """
             Recebe os dados do cliente disponíveis no momento da compra e retorna:
             - O perfil comportamental previsto (FIEL, ABANDONO, ESQUECIDO, ECONOMICO)
             - As probabilidades de cada perfil
@@ -44,9 +46,9 @@ public class FordRetainController {
             """
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Predição realizada com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos"),
-        @ApiResponse(responseCode = "409", description = "Cliente já cadastrado com este e-mail")
+            @ApiResponse(responseCode = "201", description = "Predição realizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos"),
+            @ApiResponse(responseCode = "409", description = "Cliente já cadastrado com este e-mail")
     })
     public ResponseEntity<PredicaoResponseDTO> predict(
             @Valid @RequestBody ClienteRequestDTO request) {
@@ -57,13 +59,79 @@ public class FordRetainController {
     }
 
     // ============================================================
+    // GET /clientes/{id}
+    // Recurso individual — REST maturidade nível 2
+    // ============================================================
+    @GetMapping("/clientes/{id}")
+    @Operation(
+            summary = "Buscar cliente por ID",
+            description = "Retorna os dados completos de um cliente cadastrado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
+    public ResponseEntity<ClienteResponseDTO> getCliente(
+            @Parameter(description = "ID do cliente", example = "1")
+            @PathVariable Long id) {
+
+        log.info("GET /clientes/{}", id);
+        return ResponseEntity.ok(predictionService.getClienteById(id));
+    }
+
+    // ============================================================
+    // PUT /clientes/{id}
+    // Atualização completa do recurso — REST maturidade nível 2
+    // ============================================================
+    @PutMapping("/clientes/{id}")
+    @Operation(
+            summary = "Atualizar cliente",
+            description = "Atualiza integralmente os dados de um cliente já cadastrado. O e-mail não é alterável por este endpoint."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
+    public ResponseEntity<ClienteResponseDTO> updateCliente(
+            @Parameter(description = "ID do cliente", example = "1")
+            @PathVariable Long id,
+            @Valid @RequestBody ClienteUpdateRequestDTO request) {
+
+        log.info("PUT /clientes/{}", id);
+        return ResponseEntity.ok(predictionService.updateCliente(id, request));
+    }
+
+    // ============================================================
+    // DELETE /clientes/{id}
+    // Remoção do recurso — REST maturidade nível 2
+    // ============================================================
+    @DeleteMapping("/clientes/{id}")
+    @Operation(
+            summary = "Remover cliente",
+            description = "Remove definitivamente um cliente cadastrado."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Cliente removido com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
+    public ResponseEntity<Void> deleteCliente(
+            @Parameter(description = "ID do cliente", example = "1")
+            @PathVariable Long id) {
+
+        log.info("DELETE /clientes/{}", id);
+        predictionService.deleteCliente(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ============================================================
     // GET /dashboard
     // Retorna métricas agregadas de VIN Share
     // ============================================================
     @GetMapping("/dashboard")
     @Operation(
-        summary = "Métricas de VIN Share",
-        description = """
+            summary = "Métricas de VIN Share",
+            description = """
             Retorna um resumo executivo com:
             - VIN Share geral e por região/modelo
             - Distribuição de perfis de clientes
@@ -71,7 +139,7 @@ public class FordRetainController {
             """
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Dashboard gerado com sucesso")
+            @ApiResponse(responseCode = "200", description = "Dashboard gerado com sucesso")
     })
     public ResponseEntity<DashboardDTO> getDashboard() {
         log.info("GET /dashboard");
@@ -84,16 +152,16 @@ public class FordRetainController {
     // ============================================================
     @GetMapping("/leads")
     @Operation(
-        summary = "Listar clientes em risco de evasão",
-        description = """
+            summary = "Listar clientes em risco de evasão",
+            description = """
             Retorna a lista de clientes com score de risco acima do mínimo informado,
             ordenados por prioridade (maior risco primeiro).
             Use esta lista para direcionar ações proativas da concessionária.
             """
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Lista gerada com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Parâmetro scoreMinimo inválido")
+            @ApiResponse(responseCode = "200", description = "Lista gerada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetro scoreMinimo inválido")
     })
     public ResponseEntity<List<LeadDTO>> getLeads(
             @Parameter(description = "Score mínimo de risco para incluir na lista (0-100)", example = "50")

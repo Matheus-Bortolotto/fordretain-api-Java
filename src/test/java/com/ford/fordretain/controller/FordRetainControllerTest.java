@@ -2,8 +2,11 @@ package com.ford.fordretain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ford.fordretain.dto.ClienteRequestDTO;
+import com.ford.fordretain.dto.ClienteResponseDTO;
+import com.ford.fordretain.dto.ClienteUpdateRequestDTO;
 import com.ford.fordretain.dto.DashboardDTO;
 import com.ford.fordretain.dto.PredicaoResponseDTO;
+import com.ford.fordretain.exception.ClienteNaoEncontradoException;
 import com.ford.fordretain.security.JwtService;
 import com.ford.fordretain.security.SecurityConfig;
 import com.ford.fordretain.service.PredictionService;
@@ -21,9 +24,9 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -53,12 +56,15 @@ class FordRetainControllerTest {
 
     private String tokenGerente;
     private String tokenAnalista;
+    private String tokenAdmin;
     private ClienteRequestDTO request;
+    private ClienteUpdateRequestDTO updateRequest;
 
     @BeforeEach
     void setUp() {
         tokenGerente = jwtService.generateToken("gerente@ford.com", "GERENTE");
         tokenAnalista = jwtService.generateToken("analista@ford.com", "ANALISTA");
+        tokenAdmin = jwtService.generateToken("admin@ford.com", "ADMIN");
 
         request = new ClienteRequestDTO();
         request.setNome("Joao da Silva");
@@ -71,6 +77,17 @@ class FordRetainControllerTest {
         request.setModeloVeiculo("RANGER");
         request.setDataCompra(LocalDate.now());
         request.setHistoricoMarca("PRIMEIRA_COMPRA");
+
+        updateRequest = new ClienteUpdateRequestDTO();
+        updateRequest.setNome("Joao da Silva Atualizado");
+        updateRequest.setTelefone("11999990000");
+        updateRequest.setRegiao("RJ");
+        updateRequest.setIdade(31);
+        updateRequest.setCanalCompra("CONCESSIONARIA");
+        updateRequest.setFormaPagamento("VISTA");
+        updateRequest.setModeloVeiculo("RANGER");
+        updateRequest.setDataCompra(LocalDate.now());
+        updateRequest.setHistoricoMarca("RECOMPRA");
     }
 
     // ---------- Acesso não autorizado ----------
@@ -187,5 +204,131 @@ class FordRetainControllerTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    // ---------- GET /clientes/{id} ----------
+
+    @Test
+    @DisplayName("GET /clientes/{id} existente deve retornar 200")
+    void getClienteExistenteDeveRetornar200() throws Exception {
+        ClienteResponseDTO response = ClienteResponseDTO.builder()
+                .id(1L)
+                .nome("Joao da Silva")
+                .email("joao@email.com")
+                .regiao("SP")
+                .build();
+
+        when(predictionService.getClienteById(1L)).thenReturn(response);
+
+        mockMvc.perform(get("/api/v1/clientes/1")
+                        .header("Authorization", "Bearer " + tokenAnalista))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.email").value("joao@email.com"));
+    }
+
+    @Test
+    @DisplayName("GET /clientes/{id} inexistente deve retornar 404")
+    void getClienteInexistenteDeveRetornar404() throws Exception {
+        when(predictionService.getClienteById(999L))
+                .thenThrow(new ClienteNaoEncontradoException(999L));
+
+        mockMvc.perform(get("/api/v1/clientes/999")
+                        .header("Authorization", "Bearer " + tokenGerente))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET /clientes/{id} sem token deve retornar 401")
+    void getClienteSemTokenDeveRetornar401() throws Exception {
+        mockMvc.perform(get("/api/v1/clientes/1"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    // ---------- PUT /clientes/{id} ----------
+
+    @Test
+    @DisplayName("PUT /clientes/{id} com dados válidos deve retornar 200")
+    void updateClienteComSucessoDeveRetornar200() throws Exception {
+        ClienteResponseDTO response = ClienteResponseDTO.builder()
+                .id(1L)
+                .nome(updateRequest.getNome())
+                .email("joao@email.com")
+                .regiao(updateRequest.getRegiao())
+                .build();
+
+        when(predictionService.updateCliente(eq(1L), any(ClienteUpdateRequestDTO.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(put("/api/v1/clientes/1")
+                        .header("Authorization", "Bearer " + tokenGerente)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value(updateRequest.getNome()));
+    }
+
+    @Test
+    @DisplayName("PUT /clientes/{id} inexistente deve retornar 404")
+    void updateClienteInexistenteDeveRetornar404() throws Exception {
+        when(predictionService.updateCliente(eq(999L), any(ClienteUpdateRequestDTO.class)))
+                .thenThrow(new ClienteNaoEncontradoException(999L));
+
+        mockMvc.perform(put("/api/v1/clientes/999")
+                        .header("Authorization", "Bearer " + tokenGerente)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("PUT /clientes/{id} com payload inválido deve retornar 400")
+    void updateClienteComPayloadInvalidoDeveRetornar400() throws Exception {
+        updateRequest.setIdade(10);
+
+        mockMvc.perform(put("/api/v1/clientes/1")
+                        .header("Authorization", "Bearer " + tokenGerente)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("PUT /clientes/{id} com role ANALISTA (sem permissão) deve retornar 403")
+    void updateClienteComRoleSemPermissaoDeveRetornar403() throws Exception {
+        mockMvc.perform(put("/api/v1/clientes/1")
+                        .header("Authorization", "Bearer " + tokenAnalista)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isForbidden());
+    }
+
+    // ---------- DELETE /clientes/{id} ----------
+
+    @Test
+    @DisplayName("DELETE /clientes/{id} com role ADMIN deve retornar 204")
+    void deleteClienteComSucessoDeveRetornar204() throws Exception {
+        mockMvc.perform(delete("/api/v1/clientes/1")
+                        .header("Authorization", "Bearer " + tokenAdmin))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("DELETE /clientes/{id} inexistente deve retornar 404")
+    void deleteClienteInexistenteDeveRetornar404() throws Exception {
+        org.mockito.Mockito.doThrow(new ClienteNaoEncontradoException(999L))
+                .when(predictionService).deleteCliente(999L);
+
+        mockMvc.perform(delete("/api/v1/clientes/999")
+                        .header("Authorization", "Bearer " + tokenAdmin))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("DELETE /clientes/{id} com role GERENTE (sem permissão) deve retornar 403")
+    void deleteClienteComRoleSemPermissaoDeveRetornar403() throws Exception {
+        mockMvc.perform(delete("/api/v1/clientes/1")
+                        .header("Authorization", "Bearer " + tokenGerente))
+                .andExpect(status().isForbidden());
     }
 }
