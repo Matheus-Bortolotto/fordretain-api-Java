@@ -11,6 +11,12 @@ jobs:
   build-and-test:
     name: Build e Testes
     runs-on: ubuntu-latest
+    env:
+      ORACLE_USER: ${{ secrets.ORACLE_USER }}
+      ORACLE_PASSWORD: ${{ secrets.ORACLE_PASSWORD }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
+      CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -28,12 +34,18 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
       - name: Inicializar CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: java
-      - name: Build automático para análise
-        uses: github/codeql-action/autobuild@v3
+          build-mode: manual
+      - name: Build manual (Java 17, sem depender de autodetecção)
+        run: mvn -B clean compile -DskipTests
       - name: Rodar análise SAST
         uses: github/codeql-action/analyze@v3
 
