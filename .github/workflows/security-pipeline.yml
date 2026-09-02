@@ -40,14 +40,14 @@ jobs:
           java-version: '17'
           cache: maven
       - name: Inicializar CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: java
           build-mode: manual
       - name: Build manual (Java 17, sem depender de autodetecção)
         run: mvn -B clean compile -DskipTests
       - name: Rodar análise SAST
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
 
   sca:
     name: SCA - Dependency Review
