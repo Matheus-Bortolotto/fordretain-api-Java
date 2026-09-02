@@ -81,7 +81,7 @@ jobs:
       - name: Build da imagem Docker
         run: docker build -t fordretain-api:ci .
       - name: Scan de vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@v0.35.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: fordretain-api:ci
           severity: CRITICAL,HIGH
