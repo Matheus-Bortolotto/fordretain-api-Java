@@ -1,0 +1,36 @@
+{
+  "name": "fordretain-app",
+  "version": "1.0.0",
+  "description": "Aplicativo mobile em React Native com Expo Router para retenção preditiva e aumento do VIN Share em concessionárias Ford.",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start -c",
+    "android": "expo start --android -c",
+    "ios": "expo start --ios -c",
+    "web": "expo start --web -c",
+    "lint": "expo lint",
+    "doctor": "expo-doctor"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "expo": "~55.0.31",
+    "expo-constants": "~55.0.17",
+    "expo-font": "~55.0.8",
+    "expo-linking": "~55.0.17",
+    "expo-router": "~55.0.18",
+    "expo-status-bar": "~55.0.6",
+    "firebase": "^12.17.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "0.83.10",
+    "react-native-safe-area-context": "~5.6.2",
+    "react-native-screens": "~4.23.0",
+    "react-native-web": "~0.21.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.25.0",
+    "eslint-config-expo": "~55.0.0",
+    "expo-doctor": "^1.17.11"
+  },
+  "private": true
+}
