@@ -1,4 +1,5 @@
 import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
 import PrimaryButton from './PrimaryButton';
 import colors from '../styles/colors';
 import { radius, spacing, font } from '../styles/tokens';
@@ -8,6 +9,10 @@ import AppShell from './AppShell';
 export default function RoleGuard({ allowedRoles, navigation, children, message }) {
   const { user, loading, logout } = useAuth();
   const hasAccess = user && allowedRoles.includes(user.role);
+
+  useEffect(() => {
+    if (!loading && !user) navigation.replace('Login');
+  }, [loading, navigation, user]);
 
   async function goToLogin() {
     await logout();

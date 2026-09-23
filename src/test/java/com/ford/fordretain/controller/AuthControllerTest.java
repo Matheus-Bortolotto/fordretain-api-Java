@@ -3,17 +3,22 @@ package com.ford.fordretain.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ford.fordretain.security.JwtService;
 import com.ford.fordretain.security.SecurityConfig;
+import com.ford.fordretain.model.Usuario;
+import com.ford.fordretain.service.UsuarioService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Testes de integração (camada web) do fluxo de autenticação.
@@ -32,6 +37,17 @@ class AuthControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private UsuarioService usuarioService;
+
+    @org.junit.jupiter.api.BeforeEach
+    void setup() {
+        when(usuarioService.autenticar(eq("gerente@ford.com"), eq("ford2026")))
+                .thenReturn(Usuario.builder().nome("Gerente").email("gerente@ford.com").role("GERENTE").ativo(true).build());
+        when(usuarioService.autenticar(anyString(), eq("senhaErrada"))).thenReturn(null);
+        when(usuarioService.autenticar(eq("naoexiste@ford.com"), anyString())).thenReturn(null);
+    }
 
     @Test
     @DisplayName("POST /auth/login com credenciais válidas deve retornar 200 e um token JWT")

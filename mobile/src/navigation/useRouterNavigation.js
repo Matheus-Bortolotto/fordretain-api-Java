@@ -10,6 +10,7 @@ const ROUTES = {
   Recommendations: '/recommendations',
   Prediction: '/prediction',
   Profiles: '/profiles',
+  AdminUsers: '/admin-users',
 };
 
 function normalizeParams(params) {

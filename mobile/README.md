@@ -1,71 +1,28 @@
 # FordRetain Mobile
 
-Aplicativo React Native com Expo Router integrado ao Firebase Authentication e à API Spring Boot do FordRetain.
+Aplicativo React Native com Expo Router integrado à API Spring Boot do FordRetain.
 
-## O que já está integrado
+## Autenticação
 
-- cadastro e login reais com e-mail e senha no Firebase;
-- persistência da sessão com AsyncStorage;
-- envio do Firebase ID Token no header `Authorization: Bearer`;
-- perfis `ADMIN`, `GERENTE` e `ANALISTA` obtidos pela claim `role`;
-- dashboard, leads, cliente e predição consumindo os endpoints reais da API;
-- configuração de ambiente sem credenciais do projeto do professor no código;
-- perfil inicial seguro `ANALISTA` quando a claim ainda não foi definida;
-- configuração EAS para gerar APK no perfil `preview`.
+O cadastro e o login usam exclusivamente a API própria:
 
-## Configuração
+- `POST /api/v1/auth/register` cria o usuário como `ANALISTA` e ativo;
+- `POST /api/v1/auth/login` valida a senha com BCrypt e retorna um JWT;
+- o JWT e os dados básicos do usuário ficam no `AsyncStorage` nas chaves `fordretain_token` e `fordretain_user`;
+- chamadas autenticadas enviam `Authorization: Bearer <JWT>`;
+- respostas `401` limpam a sessão e levam o usuário de volta ao login; `403` apenas informa falta de permissão.
 
-1. Copie `.env.example` para `.env`.
-2. No Console do Firebase, crie um aplicativo Web dentro do projeto FordRetain.
-3. Habilite `Authentication > Sign-in method > Email/Password`.
-4. Preencha no `.env` os valores do objeto `firebaseConfig`.
-5. Ajuste `EXPO_PUBLIC_API_URL` de acordo com o ambiente:
+Configure somente `EXPO_PUBLIC_API_URL` no arquivo `.env` (no emulador Android, normalmente `http://10.0.2.2:8080`).
 
-```text
-Emulador Android: http://10.0.2.2:8080
-Celular físico:    http://IP_DO_COMPUTADOR:8080
-API publicada:     https://endereco-da-api
-```
+## Perfis
 
-Não reutilize as credenciais Firebase presentes no projeto de exemplo da aula.
+As roles são definidas pelo backend e podem ser `ADMIN`, `GERENTE` ou `ANALISTA`. O cadastro público nunca aceita uma role enviada pelo aplicativo. A área Administração de usuários aparece somente para `ADMIN` e permite listar usuários, alterar role e ativar ou desativar contas.
 
 ## Execução
 
 ```bash
-cd mobile
 npm install
-npm start
+npm run start
 ```
 
-Validações do projeto:
-
-```bash
-npm run lint
-npm run doctor
-```
-
-## APK
-
-Após configurar uma conta Expo/EAS:
-
-```bash
-npx eas-cli build --platform android --profile preview
-```
-
-O perfil `preview` gera um APK instalável para a entrega acadêmica.
-
-## Autorização
-
-O aplicativo procura uma custom claim `role` no Firebase ID Token. Os valores aceitos são:
-
-```text
-ADMIN
-GERENTE
-ANALISTA
-```
-
-Se a claim não existir, a conta entra como `ANALISTA`. A interface oculta dashboard e predição para esse perfil, mas a API continua sendo a autoridade final de autorização.
-
-## Pendência de integração do backend
-
-O mobile já envia o Firebase ID Token, porém a API Java atual ainda valida apenas o JWT emitido pelo endpoint próprio `/api/v1/auth/login`. Para o fluxo funcionar de ponta a ponta, a API precisa validar o token Firebase com o Firebase Admin SDK e converter a claim `role` para as authorities do Spring Security.
+O backend precisa estar disponível no endereço configurado em `EXPO_PUBLIC_API_URL`.

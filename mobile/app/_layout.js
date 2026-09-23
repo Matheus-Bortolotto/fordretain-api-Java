@@ -22,6 +22,7 @@ export default function RootLayout() {
         <Stack.Screen name="recommendations" options={{ headerShown: false }} />
         <Stack.Screen name="prediction" options={{ headerShown: false }} />
         <Stack.Screen name="profiles" options={{ headerShown: false }} />
+        <Stack.Screen name="admin-users" options={{ headerShown: false }} />
       </Stack>
     </AuthProvider>
   );

@@ -1,56 +1,51 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  updateProfile,
-} from 'firebase/auth';
-import { auth, isFirebaseConfigured } from '../config/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function assertFirebaseConfigured() {
-  if (!isFirebaseConfigured) {
-    throw new Error('Firebase não configurado. Preencha o arquivo mobile/.env antes de entrar.');
+const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8080').replace(/\/$/, '');
+export const TOKEN_KEY = 'fordretain_token';
+export const USER_KEY = 'fordretain_user';
+const sessionListeners = new Set();
+
+export function onSessionExpired(listener) { sessionListeners.add(listener); return () => sessionListeners.delete(listener); }
+export async function clearSession() { await AsyncStorage.multiRemove([TOKEN_KEY, USER_KEY]); sessionListeners.forEach((listener) => listener()); }
+export async function getStoredToken() { return AsyncStorage.getItem(TOKEN_KEY); }
+export async function getStoredUser() {
+  const raw = await AsyncStorage.getItem(USER_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+
+async function request(path, body) {
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  } catch { throw new Error('Não foi possível conectar à API FordRetain.'); }
+  const text = await response.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { data = { mensagem: text }; }
+  if (!response.ok) {
+    const error = new Error(data?.mensagem || data?.erro || 'Não foi possível concluir a autenticação.');
+    error.status = response.status;
+    error.code = response.status === 409 ? 'email-already-in-use' : undefined;
+    throw error;
   }
+  return data;
 }
 
 export function getAuthErrorMessage(error) {
-  const messages = {
-    'auth/email-already-in-use': 'Já existe uma conta com este e-mail.',
-    'auth/invalid-credential': 'E-mail ou senha inválidos.',
-    'auth/invalid-email': 'Digite um e-mail válido.',
-    'auth/network-request-failed': 'Não foi possível conectar ao Firebase. Verifique sua internet.',
-    'auth/operation-not-allowed': 'O login por e-mail e senha não está habilitado no Firebase.',
-    'auth/too-many-requests': 'Muitas tentativas de acesso. Tente novamente mais tarde.',
-    'auth/weak-password': 'A senha deve ter pelo menos 6 caracteres.',
-    'auth/wrong-password': 'E-mail ou senha inválidos.',
-    'auth/user-not-found': 'E-mail ou senha inválidos.',
-  };
-
-  return messages[error?.code] || error?.message || 'Não foi possível concluir a autenticação.';
+  if (error?.code === 'email-already-in-use') return 'Já existe uma conta com este e-mail.';
+  if (error?.status === 401) return 'E-mail ou senha inválidos.';
+  return error?.message || 'Não foi possível concluir a autenticação.';
 }
 
 export async function loginWithEmail(email, password) {
-  assertFirebaseConfigured();
-  const credential = await signInWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
-  return credential.user;
+  const response = await request('/api/v1/auth/login', { email: email.trim().toLowerCase(), senha: password });
+  const user = { name: response.nome || response.email, email: response.email, role: response.role };
+  await AsyncStorage.multiSet([[TOKEN_KEY, response.token], [USER_KEY, JSON.stringify(user)]]);
+  return user;
 }
 
 export async function registerWithEmail({ name, email, password }) {
-  assertFirebaseConfigured();
-  const credential = await createUserWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
-  await updateProfile(credential.user, { displayName: name.trim() });
-  return credential.user;
+  return request('/api/v1/auth/register', { nome: name.trim(), email: email.trim().toLowerCase(), senha: password });
 }
 
-export async function logout() {
-  await signOut(auth);
-}
-
-export async function getFirebaseIdToken(forceRefresh = false) {
-  const currentUser = auth.currentUser;
-
-  if (!currentUser) {
-    throw new Error('Sessão expirada. Entre novamente para continuar.');
-  }
-
-  return currentUser.getIdToken(forceRefresh);
-}
+export async function logout() { await clearSession(); }

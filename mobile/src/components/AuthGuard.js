@@ -1,4 +1,5 @@
 import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
 import PrimaryButton from './PrimaryButton';
 import colors from '../styles/colors';
 import { radius, spacing, font } from '../styles/tokens';
@@ -7,6 +8,10 @@ import AppShell from './AppShell';
 
 export default function AuthGuard({ navigation, children }) {
   const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) navigation.replace('Login');
+  }, [loading, navigation, user]);
 
   if (loading) {
     return (

@@ -23,6 +23,7 @@ const ROUTE_META = {
   '/recommendations': { title: 'Ações', subtitle: 'Orientações para retenção' },
   '/prediction': { title: 'Classificar', subtitle: 'Simular um novo perfil' },
   '/profiles': { title: 'Perfis', subtitle: 'Padrões de comportamento' },
+  '/admin-users': { title: 'Administração', subtitle: 'Gestão de usuários' },
 };
 
 function getInitials(name = '') {
@@ -56,6 +57,7 @@ export default function AppShell({ navigation, children }) {
   ];
 
   const tools = [
+    ...(user?.role === 'ADMIN' ? [{ label: 'Administração de usuários', caption: 'Roles e status de acesso', screen: 'AdminUsers' }] : []),
     ...(isManager ? [
       { label: 'Controle executivo', caption: 'KPIs e VIN Share', screen: 'Dashboard' },
       { label: 'Classificar cliente', caption: 'Simular perfil', screen: 'Prediction' },

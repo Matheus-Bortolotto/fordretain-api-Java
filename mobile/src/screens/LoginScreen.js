@@ -10,7 +10,7 @@ import styles from '../styles/screens/LoginScreen.styles';
 export default function LoginScreen({ navigation, route }) {
   const { user, loading: sessionLoading } = useAuth();
   const [email, setEmail] = useState(route?.params?.registeredEmail || '');
-  const [password, setPassword] = useState(route?.params?.registeredPassword || '');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ visible: false, type: 'erro', title: '', message: '' });
 
