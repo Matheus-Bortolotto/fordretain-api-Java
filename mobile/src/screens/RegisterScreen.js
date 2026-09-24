@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Text, TextInput, View } from 'react-native';
+import { DEMO_MODE } from '../config/runtime';
 import PrimaryButton from '../components/PrimaryButton';
 import AppLogo from '../components/AppLogo';
 import { getAuthErrorMessage, registerWithEmail } from '../services/authService';
@@ -25,7 +26,7 @@ export default function RegisterScreen({ navigation }) {
     try {
       setLoading(true);
       await registerWithEmail({ name, email: normalizedEmail, password });
-      openFeedback('sucesso', 'Cadastro realizado com sucesso', 'Sua conta foi criada. No modo demonstração, ela entra com acesso ADMIN. Agora você já pode entrar.', true);
+      openFeedback('sucesso', 'Cadastro realizado com sucesso', DEMO_MODE ? 'Sua conta local foi criada com acesso ADMIN. Agora você já pode entrar.' : 'Sua conta foi criada com o perfil inicial ANALISTA. Agora você já pode entrar.', true);
     } catch (error) { openFeedback('erro', 'Cadastro não realizado', getAuthErrorMessage(error)); }
     finally { setLoading(false); }
   }
@@ -37,7 +38,7 @@ export default function RegisterScreen({ navigation }) {
       <TextInput style={styles.input} placeholder="E-mail" placeholderTextColor="#94A3B8" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
       <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#94A3B8" secureTextEntry value={password} onChangeText={setPassword} />
       <TextInput style={styles.input} placeholder="Confirmar senha" placeholderTextColor="#94A3B8" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
-      <Text style={styles.roleNotice}>No modo demonstração, novas contas recebem acesso ADMIN para a apresentação. Na API real, o perfil é definido pelo backend.</Text>
+      <Text style={styles.roleNotice}>{DEMO_MODE ? 'Modo demonstração: novas contas recebem acesso ADMIN e ficam salvas neste dispositivo.' : 'Novas contas recebem o perfil ANALISTA. Perfis elevados são definidos por um administrador.'}</Text>
       <PrimaryButton title={loading ? 'Cadastrando...' : 'Cadastrar'} onPress={handleRegister} disabled={loading} />
       <PrimaryButton title="Voltar ao Login" variant="secondary" onPress={() => navigation.navigate('Login')} disabled={loading} />
     </View>

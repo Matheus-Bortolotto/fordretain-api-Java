@@ -1,6 +1,27 @@
-# Apresentação sem a API
+# Modo de apresentacao
 
-O aplicativo tenta usar a API normalmente. Se a conexão falhar, ele entra automaticamente no modo demonstração e usa uma base local persistida no navegador ou no dispositivo.
+O aplicativo possui dois modos explicitamente separados.
+
+## Sistema real
+
+Configure no `.env`:
+
+```env
+EXPO_PUBLIC_DEMO_MODE=false
+EXPO_PUBLIC_API_URL=http://localhost:8080
+```
+
+O login e o cadastro usam Spring Boot, Oracle e JWT. Novos usuários recebem o perfil `ANALISTA`, conforme a regra real do backend.
+
+## Demonstração offline
+
+Configure no `.env`:
+
+```env
+EXPO_PUBLIC_DEMO_MODE=true
+```
+
+O aplicativo não chama a API. Login, cadastro, clientes, dashboard, predição e administração usam dados persistidos no AsyncStorage. Novos usuários recebem `ADMIN` para que o professor consiga navegar por todas as telas.
 
 Credenciais demonstrativas:
 
@@ -8,6 +29,4 @@ Credenciais demonstrativas:
 - `gerente@ford.com` / `ford2026`
 - `analista@ford.com` / `ford2026`
 
-O modo demonstração cobre login, cadastro, dashboard, carteira de clientes, detalhes, predição e administração de usuários. O status `demonstração` no cabeçalho indica que os dados não estão vindo do backend.
-
-Para voltar a testar a API real, ligue o backend, faça logout e entre novamente. O fallback só ocorre quando há falha de conexão; respostas HTTP reais, como `401` ou `409`, continuam sendo tratadas pela API.
+Depois de alterar o `.env`, reinicie o Expo com `npx expo start -c`.
