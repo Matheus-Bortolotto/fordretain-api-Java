@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
-import { getStoredUser, logout as logoutService, onSessionExpired } from '../services/authService';
+import { getStoredUser, loginWithEmail, logout as logoutService, onSessionExpired } from '../services/authService';
 
 export const AuthContext = createContext(undefined);
 
@@ -14,6 +14,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(async () => { await logoutService(); setUser(null); }, []);
-  const value = useMemo(() => ({ user, loading, logout }), [user, loading, logout]);
+  const login = useCallback(async (email, password) => {
+    const authenticatedUser = await loginWithEmail(email, password);
+    setUser(authenticatedUser);
+    return authenticatedUser;
+  }, []);
+  const value = useMemo(() => ({ user, loading, login, logout }), [user, loading, login, logout]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

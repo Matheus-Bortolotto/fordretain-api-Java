@@ -25,7 +25,7 @@ export default function RegisterScreen({ navigation }) {
     try {
       setLoading(true);
       await registerWithEmail({ name, email: normalizedEmail, password });
-      openFeedback('sucesso', 'Cadastro realizado com sucesso', 'Sua conta foi criada com o perfil inicial Analista. Agora você já pode entrar.', true);
+      openFeedback('sucesso', 'Cadastro realizado com sucesso', 'Sua conta foi criada. No modo demonstração, ela entra com acesso ADMIN. Agora você já pode entrar.', true);
     } catch (error) { openFeedback('erro', 'Cadastro não realizado', getAuthErrorMessage(error)); }
     finally { setLoading(false); }
   }
@@ -37,7 +37,7 @@ export default function RegisterScreen({ navigation }) {
       <TextInput style={styles.input} placeholder="E-mail" placeholderTextColor="#94A3B8" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
       <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#94A3B8" secureTextEntry value={password} onChangeText={setPassword} />
       <TextInput style={styles.input} placeholder="Confirmar senha" placeholderTextColor="#94A3B8" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
-      <Text style={styles.roleNotice}>Novas contas recebem o perfil Analista. Perfis elevados são definidos por um administrador.</Text>
+      <Text style={styles.roleNotice}>No modo demonstração, novas contas recebem acesso ADMIN para a apresentação. Na API real, o perfil é definido pelo backend.</Text>
       <PrimaryButton title={loading ? 'Cadastrando...' : 'Cadastrar'} onPress={handleRegister} disabled={loading} />
       <PrimaryButton title="Voltar ao Login" variant="secondary" onPress={() => navigation.navigate('Login')} disabled={loading} />
     </View>

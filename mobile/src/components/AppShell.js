@@ -12,6 +12,7 @@ const TOP_LEVEL_PATHS = ['/home', '/clients'];
 const HEALTH_META = {
   checking: { label: 'verificando', color: colors.muted },
   online: { label: 'online', color: colors.successGreen },
+  demo: { label: 'demonstração', color: colors.warningYellow },
   offline: { label: 'offline', color: colors.riskRed },
 };
 

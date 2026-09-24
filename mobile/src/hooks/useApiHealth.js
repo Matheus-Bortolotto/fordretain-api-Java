@@ -12,8 +12,8 @@ async function checkHealth() {
 
   inFlight = (async () => {
     try {
-      await getApiHealth();
-      cache = { status: 'online', checkedAt: Date.now() };
+      const response = await getApiHealth();
+      cache = { status: response?._demoMode ? 'demo' : 'online', checkedAt: Date.now() };
     } catch {
       cache = { status: 'offline', checkedAt: Date.now() };
     } finally {

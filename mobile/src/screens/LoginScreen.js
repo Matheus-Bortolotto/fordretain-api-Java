@@ -1,18 +1,23 @@
 import { useEffect, useState } from 'react';
-import { View, Text, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
 import PrimaryButton from '../components/PrimaryButton';
 import AppLogo from '../components/AppLogo';
-import { getAuthErrorMessage, loginWithEmail } from '../services/authService';
+import { getAuthErrorMessage } from '../services/authService';
 import useAuth from '../hooks/useAuth';
 import FeedbackModal from '../components/FeedbackModal';
 import styles from '../styles/screens/LoginScreen.styles';
 
 export default function LoginScreen({ navigation, route }) {
-  const { user, loading: sessionLoading } = useAuth();
+  const { user, loading: sessionLoading, login } = useAuth();
   const [email, setEmail] = useState(route?.params?.registeredEmail || '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ visible: false, type: 'erro', title: '', message: '' });
+
+  function openRegister() {
+    Keyboard.dismiss();
+    navigation.navigate('Cadastro');
+  }
 
   useEffect(() => {
     if (!sessionLoading && user) {
@@ -31,7 +36,8 @@ export default function LoginScreen({ navigation, route }) {
 
     try {
       setLoading(true);
-      await loginWithEmail(normalizedEmail, password);
+      await login(normalizedEmail, password);
+      Keyboard.dismiss();
       navigation.replace('Home');
     } catch (error) {
       showError(getAuthErrorMessage(error));
@@ -53,7 +59,7 @@ export default function LoginScreen({ navigation, route }) {
 
         <PrimaryButton title={loading || sessionLoading ? 'Entrando...' : 'Entrar'} onPress={handleLogin} disabled={loading || sessionLoading} />
         <Text style={styles.registerPrompt}>Ainda não tem conta?</Text>
-        <PrimaryButton title="Criar conta" variant="secondary" onPress={() => navigation.navigate('Cadastro')} disabled={loading || sessionLoading} />
+        <PrimaryButton title="Criar conta" variant="secondary" onPress={openRegister} disabled={loading || sessionLoading} />
       </View>
 
       <FeedbackModal

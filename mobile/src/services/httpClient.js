@@ -1,4 +1,5 @@
 import { clearSession, getStoredToken } from './authService';
+import { isDemoToken, mockApiRequest } from './mockApi';
 
 const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8080').replace(/\/$/, '');
 
@@ -15,10 +16,16 @@ async function parseResponse(response) {
 
 export async function apiRequest(path, options = {}) {
   const token = await getStoredToken();
+  if (isDemoToken(token)) return mockApiRequest(path, options);
+
   let response;
   try {
     response = await fetch(`${API_URL}${path}`, { ...options, headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers } });
-  } catch (error) { throw new ApiError('Não foi possível conectar à API FordRetain.', 0, error?.message); }
+  } catch (error) {
+    try { return await mockApiRequest(path, options); } catch (mockError) {
+      throw new ApiError('Não foi possível conectar à API FordRetain.', 0, error?.message || mockError?.message);
+    }
+  }
   if (response.status === 401) await clearSession();
   const body = await parseResponse(response);
   if (!response.ok) {

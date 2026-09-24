@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isMockCredential, mockAuthRequest, saveDemoUser } from './mockApi';
 
 const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8080').replace(/\/$/, '');
 export const TOKEN_KEY = 'fordretain_token';
@@ -18,11 +19,17 @@ async function request(path, body) {
   let response;
   try {
     response = await fetch(`${API_URL}${path}`, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  } catch { throw new Error('Não foi possível conectar à API FordRetain.'); }
+  } catch {
+    return mockAuthRequest(path, body);
+  }
   const text = await response.text();
   let data = null;
   try { data = text ? JSON.parse(text) : null; } catch { data = { mensagem: text }; }
   if (!response.ok) {
+    if (path === '/api/v1/auth/login' && (response.status === 401 || response.status >= 500) && await isMockCredential(body.email, body.senha)) {
+      return mockAuthRequest(path, body);
+    }
+    if (path === '/api/v1/auth/register' && response.status >= 500) return mockAuthRequest(path, body);
     const error = new Error(data?.mensagem || data?.erro || 'Não foi possível concluir a autenticação.');
     error.status = response.status;
     error.code = response.status === 409 ? 'email-already-in-use' : undefined;
@@ -38,14 +45,20 @@ export function getAuthErrorMessage(error) {
 }
 
 export async function loginWithEmail(email, password) {
-  const response = await request('/api/v1/auth/login', { email: email.trim().toLowerCase(), senha: password });
+  const normalizedEmail = email.trim().toLowerCase();
+  const response = await (await isMockCredential(normalizedEmail, password)
+    ? mockAuthRequest('/api/v1/auth/login', { email: normalizedEmail, senha: password })
+    : request('/api/v1/auth/login', { email: normalizedEmail, senha: password }));
   const user = { name: response.nome || response.email, email: response.email, role: response.role };
   await AsyncStorage.multiSet([[TOKEN_KEY, response.token], [USER_KEY, JSON.stringify(user)]]);
   return user;
 }
 
 export async function registerWithEmail({ name, email, password }) {
-  return request('/api/v1/auth/register', { nome: name.trim(), email: email.trim().toLowerCase(), senha: password });
+  const normalizedEmail = email.trim().toLowerCase();
+  const response = await request('/api/v1/auth/register', { nome: name.trim(), email: normalizedEmail, senha: password });
+  await saveDemoUser({ nome: name, email: normalizedEmail, senha: password });
+  return response;
 }
 
 export async function logout() { await clearSession(); }
