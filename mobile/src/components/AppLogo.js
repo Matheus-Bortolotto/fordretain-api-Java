@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import colors from '../styles/colors';
-import { radius, font, shadow } from '../styles/tokens';
+import { radius, font } from '../styles/tokens';
 
 export default function AppLogo({ small = false, light = false }) {
   return (
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
   logoSmall: {
     gap: 6,
   },
-  mark: { width: 28, height: 28, borderRadius: radius.sm, backgroundColor: colors.electricBlue, alignItems: 'center', justifyContent: 'center', ...shadow.glowBlue },
-  markText: { color: colors.navy, fontWeight: font.weight.black, fontSize: 11, letterSpacing: -0.5 },
+  mark: { width: 28, height: 28, borderRadius: radius.sm, backgroundColor: colors.fordBlue, alignItems: 'center', justifyContent: 'center' },
+  markText: { color: colors.white, fontWeight: font.weight.black, fontSize: 11, letterSpacing: -0.5 },
   text: {
     color: colors.navy,
     fontSize: 22,

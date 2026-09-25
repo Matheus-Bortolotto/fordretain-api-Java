@@ -31,7 +31,7 @@ function AdminUsersContent({ navigation }) {
         <Text style={{ color: colors.textGray, marginTop: 4 }}>{user.email}</Text>
         <Text style={{ color: colors.fordBlue, fontWeight: '700', marginTop: 8 }}>{user.role} · {user.ativo ? 'Ativo' : 'Inativo'}</Text>
         <View style={{ flexDirection: 'row', gap: 8, marginTop: 12 }}>
-          <Pressable onPress={() => changeRole(user)} style={{ backgroundColor: colors.navy, padding: 10, borderRadius: 8 }}><Text style={{ color: colors.white }}>Alternar role</Text></Pressable>
+          <Pressable onPress={() => changeRole(user)} style={{ backgroundColor: colors.fordBlue, padding: 10, borderRadius: 8 }}><Text style={{ color: colors.white }}>Alternar role</Text></Pressable>
           <Pressable onPress={() => changeStatus(user)} style={{ backgroundColor: user.ativo ? colors.riskRed : colors.successGreen, padding: 10, borderRadius: 8 }}><Text style={{ color: colors.white }}>{user.ativo ? 'Desativar' : 'Ativar'}</Text></Pressable>
         </View>
       </View>)}

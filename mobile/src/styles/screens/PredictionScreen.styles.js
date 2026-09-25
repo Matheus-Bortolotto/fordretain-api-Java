@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   optionLabel: { color: colors.navy, fontWeight: font.weight.black, fontSize: 14 },
   optionWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   optionChip: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.pill, backgroundColor: colors.surfaceSoft, paddingHorizontal: 12, paddingVertical: 9 },
-  optionChipActive: { backgroundColor: colors.fordBlue, borderColor: colors.fordBlue, ...shadow.glowBlue },
+  optionChipActive: { backgroundColor: colors.fordBlue, borderColor: colors.fordBlue },
   optionText: { color: colors.fordBlue, fontWeight: font.weight.bold, fontSize: 12 },
   optionTextActive: { color: colors.white },
   loadingBox: { backgroundColor: colors.white, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, padding: spacing.md - 2, alignItems: 'center' },

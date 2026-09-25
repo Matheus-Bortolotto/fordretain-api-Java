@@ -27,13 +27,15 @@ export const font = {
   tracking: { tight: -0.6, normal: 0, wide: 0.8, wider: 1.2 },
 };
 
-export function glow(color, opacity = 0.35, blurRadius = 12) {
+// Kept for call-site compatibility, but no longer tints the shadow by color —
+// colored/"glow" shadows read as neon dashboard UI, not native iOS.
+export function glow() {
   return {
-    shadowColor: color,
-    shadowOpacity: opacity,
-    shadowRadius: blurRadius,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 6,
+    shadowColor: colors.shadow,
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   };
 }
 
@@ -52,8 +54,8 @@ export const shadow = {
     shadowOffset: { width: 0, height: 8 },
     elevation: 5,
   },
-  glowBlue: glow(colors.electricBlue, 0.4, 14),
-  glowRed: glow(colors.riskRed, 0.35, 12),
+  glowBlue: glow(),
+  glowRed: glow(),
 };
 
 export default { spacing, radius, font, shadow, glow };

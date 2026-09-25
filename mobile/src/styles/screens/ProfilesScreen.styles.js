@@ -7,12 +7,12 @@ const styles = StyleSheet.create({
   title: { fontSize: font.size.xxl + 1, fontWeight: font.weight.black, marginBottom: 4, color: colors.navy },
   subtitle: { color: colors.textGray, marginBottom: spacing.md - 2, fontSize: 12, lineHeight: 18 },
   card: { backgroundColor: colors.white, borderRadius: radius.lg, padding: spacing.md - 2, marginBottom: spacing.sm - 2, borderWidth: 1, borderColor: colors.border, gap: 7, ...shadow.sm },
-  explanationCard: { backgroundColor: colors.navy, borderRadius: radius.lg, padding: spacing.md - 2, marginBottom: spacing.sm, borderLeftWidth: 3, borderLeftColor: colors.electricBlue, gap: 7 },
+  explanationCard: { backgroundColor: colors.lightBlue, borderRadius: radius.lg, padding: spacing.md - 2, marginBottom: spacing.sm, borderLeftWidth: 3, borderLeftColor: colors.fordBlue, gap: 7 },
   sectionTitle: { color: colors.navy, fontWeight: font.weight.bold, marginBottom: 4 },
   row: { color: colors.textGray, lineHeight: 20, fontSize: 12 },
   label: { fontWeight: font.weight.bold, color: colors.navy },
-  explanationTitle: { color: colors.white, fontWeight: font.weight.black, marginBottom: 4 },
-  explanationRow: { color: '#D7E7F7', lineHeight: 20, fontSize: 12 },
+  explanationTitle: { color: colors.navy, fontWeight: font.weight.black, marginBottom: 4 },
+  explanationRow: { color: colors.inkSoft, lineHeight: 20, fontSize: 12 },
 });
 
 export default styles;

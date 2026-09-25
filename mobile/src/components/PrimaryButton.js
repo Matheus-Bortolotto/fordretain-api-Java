@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: colors.fordBlue,
     borderColor: colors.fordBlue,
-    ...shadow.glowBlue,
   },
   secondaryButton: {
     backgroundColor: colors.surface,

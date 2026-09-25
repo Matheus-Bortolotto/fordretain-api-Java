@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import colors from '../styles/colors';
 import AuthGuard from '../components/AuthGuard';
 import RetryState from '../components/RetryState';
@@ -17,15 +18,15 @@ function MetricTile({ label, value, tone = 'blue', onPress }) {
 function LeadRow({ lead, onPress, first }) {
   return (
     <Pressable style={[styles.leadRow, first && styles.leadRowFirst]} onPress={onPress}>
-      <View style={styles.leadRank}><Text style={styles.leadRankText}>{first ? '01' : '•'}</Text></View>
+      <View style={styles.leadRank}><View style={[styles.leadRankDot, first && styles.leadRankDotFirst]} /></View>
       <View style={styles.leadInfo}><Text style={styles.leadName}>{lead.nome}</Text><Text style={styles.leadMeta}>{lead.veiculo} · {lead.prioridade}</Text></View>
       <View style={styles.leadScore}><Text style={styles.riskText}>{lead.riscoEvasao}%</Text><Text style={styles.scoreLabel}>risco</Text></View>
     </Pressable>
   );
 }
 
-function ToolRow({ index, title, caption, onPress }) {
-  return <Pressable style={styles.toolRow} onPress={onPress}><Text style={styles.toolIndex}>{index}</Text><View style={styles.toolCopy}><Text style={styles.toolTitle}>{title}</Text><Text style={styles.toolCaption}>{caption}</Text></View><Text style={styles.toolArrow}>→</Text></Pressable>;
+function ToolRow({ title, caption, onPress }) {
+  return <Pressable style={styles.toolRow} onPress={onPress}><View style={styles.toolCopy}><Text style={styles.toolTitle}>{title}</Text><Text style={styles.toolCaption}>{caption}</Text></View><Ionicons name="chevron-forward" size={18} color={colors.muted} /></Pressable>;
 }
 
 export default function HomeScreen({ navigation }) {
@@ -68,7 +69,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.statusText}>{loading ? 'Atualizando indicadores...' : 'Última leitura disponível'}</Text>
         </View>
 
-        <View style={styles.sectionHeader}><View><Text style={styles.sectionTitle}>Leitura rápida</Text><Text style={styles.sectionSubtitle}>Um resumo para começar o turno.</Text></View><Text style={styles.sectionCode}>01 / 03</Text></View>
+        <View style={styles.sectionHeader}><View><Text style={styles.sectionTitle}>Leitura rápida</Text><Text style={styles.sectionSubtitle}>Um resumo para começar o turno.</Text></View></View>
         {error && !loading ? (
           <RetryState title="Não foi possível atualizar a Home" message={error} onRetry={retry} />
         ) : (
@@ -85,17 +86,16 @@ export default function HomeScreen({ navigation }) {
           </View>
         )}
 
-        <View style={styles.sectionHeader}><View><Text style={styles.sectionTitle}>Fila prioritária</Text><Text style={styles.sectionSubtitle}>Comece por quem precisa de contexto.</Text></View><Text style={styles.sectionCode}>02 / 03</Text></View>
+        <View style={styles.sectionHeader}><View><Text style={styles.sectionTitle}>Fila prioritária</Text><Text style={styles.sectionSubtitle}>Comece por quem precisa de contexto.</Text></View></View>
         <View style={styles.queueCard}>
           {priorityLeads.length ? priorityLeads.map((lead, index) => <LeadRow key={lead.id} lead={lead} first={index === 0} onPress={() => navigation.navigate('ClientDetails', { client: lead })} />) : <Text style={styles.emptyText}>Nenhum cliente prioritário encontrado.</Text>}
-          <Pressable style={styles.queueFooter} onPress={() => navigation.navigate('Clients')}><Text style={styles.queueFooterText}>Ver carteira completa</Text><Text style={styles.toolArrow}>→</Text></Pressable>
+          <Pressable style={styles.queueFooter} onPress={() => navigation.navigate('Clients')}><Text style={styles.queueFooterText}>Ver carteira completa</Text><Ionicons name="chevron-forward" size={18} color={colors.fordBlue} /></Pressable>
         </View>
 
-        <View style={styles.sectionHeader}><View><Text style={styles.sectionTitle}>Atalhos de trabalho</Text><Text style={styles.sectionSubtitle}>Acesse as ferramentas sem procurar no menu.</Text></View><Text style={styles.sectionCode}>03 / 03</Text></View>
+        <View style={styles.sectionHeader}><View><Text style={styles.sectionTitle}>Atalhos de trabalho</Text><Text style={styles.sectionSubtitle}>Acesse as ferramentas sem procurar no menu.</Text></View></View>
         <View style={styles.toolsCard}>
-          {isManager ? <ToolRow index="01" title="Controle executivo" caption="Indicadores e distribuição da carteira" onPress={() => navigation.navigate('Dashboard')} /> : null}
-          {isManager ? <ToolRow index="02" title="Classificar cliente" caption="Simulação de perfil comportamental" onPress={() => navigation.navigate('Prediction')} /> : null}
-          <ToolRow index={isManager ? '03' : '01'} title="Orientações de retenção" caption="Estratégias por perfil e nível de risco" onPress={() => navigation.navigate('Recommendations')} />
+          {isManager ? <ToolRow title="Classificar cliente" caption="Simulação de perfil comportamental" onPress={() => navigation.navigate('Prediction')} /> : null}
+          <ToolRow title="Orientações de retenção" caption="Estratégias por perfil e nível de risco" onPress={() => navigation.navigate('Recommendations')} />
         </View>
       </ScrollView>
     </AuthGuard>

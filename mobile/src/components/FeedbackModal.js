@@ -26,7 +26,8 @@ export default function FeedbackModal({
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose || onButtonPress}>
       <View style={styles.backdrop}>
         <Pressable style={StyleSheet.absoluteFill} onPress={onClose || onButtonPress} />
-        <View style={[styles.card, { borderColor: palette.accent }]}>
+        <View style={styles.card}>
+          <View style={[styles.accentBar, { backgroundColor: palette.accent }]} />
           <View style={[styles.typeChip, { backgroundColor: palette.chipBg }]}>
             <Text style={[styles.typeChipText, { color: palette.chipText }]}>{palette.title}</Text>
           </View>
@@ -55,14 +56,17 @@ const styles = StyleSheet.create({
     maxWidth: 460,
     backgroundColor: colors.white,
     borderRadius: radius.lg,
-    borderWidth: 2,
+    borderWidth: 1,
+    borderColor: colors.borderSoft,
     padding: spacing.lg,
+    overflow: 'hidden',
     shadowColor: '#0F172A',
     shadowOpacity: 0.18,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     elevation: 6,
   },
+  accentBar: { position: 'absolute', top: 0, left: 0, right: 0, height: 3 },
   typeChip: { alignSelf: 'flex-start', borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4, marginBottom: spacing.sm },
   typeChipText: { fontWeight: font.weight.bold, fontSize: 12 },
   title: { fontSize: font.size.xxl, fontWeight: font.weight.bold, color: colors.navy, marginBottom: spacing.xs },

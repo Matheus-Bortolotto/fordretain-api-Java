@@ -2,7 +2,7 @@ const colors = {
   navy: '#071A33',
   navySoft: '#102B4B',
   fordBlue: '#1769E8',
-  electricBlue: '#35B9F4',
+  electricBlue: '#1769E8',
   skyBlue: '#DCEBFF',
   lightBlue: '#EEF6FF',
   background: '#F4F7FA',

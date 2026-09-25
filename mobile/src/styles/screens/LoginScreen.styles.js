@@ -3,17 +3,15 @@ import colors from '../colors';
 import { radius, spacing, font, shadow } from '../tokens';
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.navy, justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
+  container: { flex: 1, backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
   card: {
     width: '100%',
     maxWidth: 540,
     backgroundColor: colors.white,
     borderRadius: radius.xl,
-    borderTopWidth: 4,
-    borderTopColor: colors.electricBlue,
     padding: spacing.xl,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.45)',
+    borderColor: colors.borderSoft,
     ...shadow.md,
   },
   kicker: { color: colors.fordBlue, fontWeight: font.weight.black, fontSize: 10, letterSpacing: font.tracking.wider, marginTop: spacing.xl },
