@@ -51,6 +51,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    @ExceptionHandler(UsuarioJaCadastradoException.class)
+    public ResponseEntity<ErrorResponse> handleUsuarioJaCadastrado(UsuarioJaCadastradoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.builder().status(409)
+                .erro("Conflito").mensagem(ex.getMessage()).timestamp(LocalDateTime.now()).build());
+    }
+
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleUsuarioNaoEncontrado(UsuarioNaoEncontradoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().status(404)
+                .erro("Não encontrado").mensagem(ex.getMessage()).timestamp(LocalDateTime.now()).build());
+    }
+
+    @ExceptionHandler(OperacaoUsuarioException.class)
+    public ResponseEntity<ErrorResponse> handleOperacaoUsuario(OperacaoUsuarioException ex) {
+        return ResponseEntity.badRequest().body(ErrorResponse.builder().status(400)
+                .erro("Operação inválida").mensagem(ex.getMessage()).timestamp(LocalDateTime.now()).build());
+    }
+
     // Cliente não encontrado
     @ExceptionHandler(ClienteNaoEncontradoException.class)
     public ResponseEntity<ErrorResponse> handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {

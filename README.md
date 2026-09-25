@@ -169,7 +169,7 @@ Autentica o usuário e retorna um token JWT válido por 24h. **Endpoint público
 }
 ```
 
-Usuários disponíveis (mock): `admin@ford.com`, `gerente@ford.com`, `analista@ford.com` — senha `ford2026` para todos.
+No modo demonstração do mobile, essas credenciais são simuladas localmente. No modo real, os usuários são persistidos no Oracle e o cadastro público cria novos usuários com o perfil `ANALISTA`.
 
 > Todos os endpoints abaixo exigem o header `Authorization: Bearer <token>`, exceto o login.
 
@@ -363,6 +363,8 @@ O **Flyway** executa as migrações automaticamente ao iniciar a aplicação:
 - `V1__create_tables.sql` — cria as tabelas `clientes` e `predicoes` (sintaxe Oracle)
 - `V2__insert_sample_data.sql` — insere dados de exemplo para testes
 - `V3__fix_predicao_cascade_delete.sql` — ajusta a FK `predicoes → clientes` para `ON DELETE CASCADE` (necessário para o `DELETE /clientes/{id}` funcionar sem violar integridade referencial)
+- `V4__widen_telefone_for_encryption.sql` — amplia o campo de telefone para suportar o valor criptografado
+- `V5__create_usuarios.sql` — cria a estrutura de usuários, roles e status para autenticação e administração
 
 ---
 
@@ -471,6 +473,116 @@ Além dos testes automatizados, a API foi validada de ponta a ponta com a aplica
 | **ABANDONO** | Realiza no máximo a 1ª revisão e sai da rede | Contato imediato + pacote de revisões |
 | **ESQUECIDO** | Perde o timing da manutenção | Lembrete com agendamento fácil |
 | **ECONOMICO** | Sensível a preço, mantém relação parcial | Cupom de desconto na próxima revisão |
+
+---
+
+## Aplicação mobile
+
+O aplicativo mobile está em [`mobile/`](mobile/) e foi desenvolvido com React Native, Expo Router e AsyncStorage. Ele permite acompanhar a carteira de clientes, consultar riscos, classificar novos perfis, visualizar recomendações e administrar usuários.
+
+### Galeria de telas
+
+As telas abaixo representam o fluxo principal da aplicação:
+
+<table>
+  <tr>
+    <td align="center"><strong>Login</strong><br><img src="screenshots/tela-logign.png" width="190" alt="Tela de login"></td>
+    <td align="center"><strong>Cadastro</strong><br><img src="screenshots/cadastro.png" width="190" alt="Tela de cadastro"></td>
+    <td align="center"><strong>Visão geral</strong><br><img src="screenshots/tela-inicial1.png" width="190" alt="Tela inicial do aplicativo"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Carteira de risco</strong><br><img src="screenshots/carteira.png" width="190" alt="Carteira de clientes em risco"></td>
+    <td align="center"><strong>Detalhes do cliente</strong><br><img src="screenshots/cliente.png" width="190" alt="Detalhes de um cliente"></td>
+    <td align="center"><strong>Ações recomendadas</strong><br><img src="screenshots/acoes.png" width="190" alt="Tela de ações recomendadas"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Classificação</strong><br><img src="screenshots/classificacao1.png" width="190" alt="Formulário de classificação de cliente"></td>
+    <td align="center"><strong>Resultado da classificação</strong><br><img src="screenshots/resultado-classificacao.png" width="190" alt="Resultado da classificação"></td>
+    <td align="center"><strong>Administração</strong><br><img src="screenshots/users.png" width="190" alt="Administração de usuários"></td>
+  </tr>
+</table>
+
+### Como executar o mobile
+
+#### Pré-requisitos
+
+- Node.js 18 ou superior e npm
+- Expo CLI via `npx` (não é necessário instalar globalmente)
+- Para o modo real, a API Spring Boot disponível em `http://localhost:8080`
+
+#### Instalação
+
+```bash
+cd mobile
+npm ci
+```
+
+Copie `mobile/.env.example` para `mobile/.env` e escolha um dos modos abaixo.
+
+#### Modo demonstração offline
+
+Use este modo para apresentar o aplicativo sem iniciar a API ou o Oracle:
+
+```env
+EXPO_PUBLIC_DEMO_MODE=true
+```
+
+Nesse modo, login, cadastro e dados de demonstração ficam armazenados localmente no dispositivo por meio do AsyncStorage. Novos usuários recebem o perfil `ADMIN`, permitindo navegar por todas as telas.
+
+Credenciais disponíveis:
+
+- `admin@ford.com` / `ford2026`
+- `gerente@ford.com` / `ford2026`
+- `analista@ford.com` / `ford2026`
+
+#### Modo real com API
+
+```env
+EXPO_PUBLIC_DEMO_MODE=false
+EXPO_PUBLIC_API_URL=http://localhost:8080
+```
+
+Inicie o backend na raiz do projeto:
+
+```bash
+mvn spring-boot:run
+```
+
+Para Android Emulator, use `EXPO_PUBLIC_API_URL=http://10.0.2.2:8080`. Em um celular físico, substitua pelo IP local do computador, por exemplo `http://192.168.0.10:8080`.
+
+#### Iniciar o Expo
+
+Dentro de `mobile/`, execute:
+
+```bash
+# Menu do Expo
+npm run start
+
+# Navegador
+npm run web
+
+# Emulador/dispositivo Android conectado
+npm run android
+```
+
+Depois de alterar o `.env`, reinicie com cache limpo:
+
+```bash
+npx expo start -c
+```
+
+Mais detalhes sobre os dois modos estão em [`mobile/DEMO.md`](mobile/DEMO.md) e no guia específico [`mobile/README.md`](mobile/README.md).
+
+#### Gerar APK Android
+
+O perfil `preview` do EAS está configurado para gerar um APK em modo demonstração:
+
+```bash
+cd mobile
+npx eas-cli@latest build -p android --profile preview --clear-cache
+```
+
+O comando inicia o build remoto e, ao final, o EAS disponibiliza o link para baixar o APK.
 
 ---
 

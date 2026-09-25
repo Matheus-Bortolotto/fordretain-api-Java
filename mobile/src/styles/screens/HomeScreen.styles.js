@@ -1,0 +1,46 @@
+import { StyleSheet } from 'react-native';
+import colors from '../colors';
+import { radius, spacing, font, shadow } from '../tokens';
+
+const styles = StyleSheet.create({
+  container: { flexGrow: 1, padding: spacing.lg, backgroundColor: colors.background, paddingBottom: spacing.xxl - 2, gap: spacing.sm + 2 },
+  introRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
+  kicker: { color: colors.fordBlue, fontWeight: font.weight.black, fontSize: 10, letterSpacing: font.tracking.wider },
+  greeting: { color: colors.navy, fontWeight: font.weight.black, fontSize: font.size.hero - 5, letterSpacing: font.tracking.tight - 0.2, marginTop: 4 },
+  dateMark: { borderLeftWidth: 2, borderLeftColor: colors.electricBlue, paddingLeft: 9, alignItems: 'flex-end' },
+  dateMarkTop: { color: colors.navy, fontSize: 10, fontWeight: font.weight.black, letterSpacing: 1 },
+  dateMarkBottom: { color: colors.muted, fontSize: 10, fontWeight: font.weight.bold, letterSpacing: 1, marginTop: 3 },
+  statusBand: { backgroundColor: colors.white, padding: spacing.md, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, borderLeftWidth: 3, borderLeftColor: colors.fordBlue, ...shadow.sm },
+  statusIndicator: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+  statusDot: { width: 7, height: 7, borderRadius: radius.pill, backgroundColor: colors.fordBlue },
+  statusLabel: { color: colors.fordBlue, fontWeight: font.weight.black, fontSize: 10, letterSpacing: 1 },
+  statusText: { color: colors.textGray, fontWeight: font.weight.regular, fontSize: 12, marginTop: 7 },
+  errorText: { color: colors.riskRed, fontWeight: font.weight.semibold, fontSize: 12, lineHeight: 17, marginTop: 7 },
+  sectionHeader: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 5 },
+  sectionTitle: { color: colors.navy, fontWeight: font.weight.black, fontSize: font.size.xl, letterSpacing: -0.3 },
+  sectionSubtitle: { color: colors.textGray, fontWeight: font.weight.regular, fontSize: 12, marginTop: 3 },
+  metricGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs + 1 },
+  metricTile: { width: '48%', minHeight: 88, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white, padding: spacing.sm + 1, justifyContent: 'space-between', ...shadow.sm },
+  metric_blue: { borderTopWidth: 3, borderTopColor: colors.fordBlue },
+  metric_red: { backgroundColor: colors.riskRedSoft, borderColor: '#F3C3C8', borderTopWidth: 3, borderTopColor: colors.riskRed },
+  metricValue: { color: colors.navy, fontWeight: font.weight.black, fontSize: font.size.display - 5, letterSpacing: -0.6 },
+  metricValueDark: { color: colors.navy },
+  metricLabel: { color: colors.textGray, fontWeight: font.weight.bold, fontSize: 11, lineHeight: 15 },
+  metricLabelDark: { color: colors.textGray },
+  metric_dark: { backgroundColor: colors.surfaceSoft, borderTopWidth: 3, borderTopColor: colors.fordBlue },
+  loadingInline: { width: '100%', minHeight: 70, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 9, backgroundColor: colors.white, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, padding: spacing.sm + 1 },
+  loadingText: { color: colors.textGray, fontWeight: font.weight.semibold, fontSize: 12 },
+  queueCard: { backgroundColor: colors.white, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, paddingHorizontal: spacing.sm + 1, ...shadow.sm },
+  leadRow: { flexDirection: 'row', alignItems: 'center', minHeight: 67, gap: 10, borderBottomWidth: 1, borderBottomColor: colors.borderSoft },
+  leadRowFirst: { borderLeftWidth: 3, borderLeftColor: colors.riskRed, paddingLeft: 9 },
+  leadRank: { width: 22, alignItems: 'center' }, leadRankDot: { width: 7, height: 7, borderRadius: radius.pill, backgroundColor: colors.border }, leadRankDotFirst: { backgroundColor: colors.riskRed },
+  leadInfo: { flex: 1 }, leadName: { color: colors.navy, fontWeight: font.weight.black, fontSize: 14 }, leadMeta: { color: colors.textGray, fontWeight: font.weight.regular, fontSize: 11, marginTop: 4 },
+  leadScore: { alignItems: 'flex-end' }, riskText: { color: colors.riskRed, fontWeight: font.weight.black, fontSize: 15 }, scoreLabel: { color: colors.muted, fontSize: 10, fontWeight: font.weight.semibold, marginTop: 2 },
+  queueFooter: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, queueFooterText: { color: colors.fordBlue, fontWeight: font.weight.black, fontSize: 12 },
+  emptyText: { color: colors.textGray, fontWeight: font.weight.semibold, textAlign: 'center', paddingVertical: 20, fontSize: 12 },
+  toolsCard: { backgroundColor: colors.white, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, paddingHorizontal: spacing.sm + 1, ...shadow.sm },
+  toolRow: { minHeight: 62, flexDirection: 'row', alignItems: 'center', gap: 12, borderBottomWidth: 1, borderBottomColor: colors.borderSoft },
+  toolCopy: { flex: 1 }, toolTitle: { color: colors.navy, fontWeight: font.weight.black, fontSize: 13 }, toolCaption: { color: colors.textGray, fontSize: 11, marginTop: 3 },
+});
+
+export default styles;

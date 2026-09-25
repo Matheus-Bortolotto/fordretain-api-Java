@@ -9,6 +9,7 @@ public class LoginResponseDTO {
     private String token;
     private String tipo;
     private String email;
+    private String nome;
     private String role;
     private long expiresIn;
 }

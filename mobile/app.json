@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "FordRetain",
+    "slug": "fordretain",
+    "version": "1.0.0",
+    "scheme": "fordretain",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "br.com.fiap.fordretain",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c6b71d53-76f6-4119-b2eb-33fb34acc815"
+      }
+    },
+    "owner": "mricciotti"
+  }
+}
