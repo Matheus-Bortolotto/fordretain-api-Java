@@ -27,6 +27,13 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c6b71d53-76f6-4119-b2eb-33fb34acc815"
+      }
+    },
+    "owner": "mricciotti"
   }
 }

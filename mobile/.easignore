@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Expo and generated output
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Generated native projects (EAS/CNG regenerates them on the server)
+.kotlin/
+*.orig.*
+/android
+/ios
+
+# Local environment and credentials
+.env
+.env*.local
+
+# Local system files
+.DS_Store
+*.tsbuildinfo
+
+# Metro and debug files
+.metro-health-check*
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Local signing files
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
