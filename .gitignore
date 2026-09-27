@@ -2,3 +2,9 @@
 /target/
 
 .env
+monitoring/metrics-token.txt
+monitoring/.env
+
+evidencias/runtime.jsonl
+
+__pycache__/

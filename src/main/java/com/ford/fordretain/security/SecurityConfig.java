@@ -27,6 +27,8 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    @org.springframework.beans.factory.annotation.Value("${security.cors.allowed-origins:http://localhost:8081}")
+    private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,6 +47,7 @@ public class SecurityConfig {
                         // Health check público — necessário para orquestradores/monitoramento
                         // (K8s, load balancer) verificarem se a aplicação está no ar.
                         .requestMatchers("/actuator/health/**").permitAll()
+                        .requestMatchers("/actuator/prometheus").hasRole("MONITORING")
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                         // Endpoints públicos
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
@@ -95,7 +98,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOrigins(java.util.Arrays.stream(allowedOrigins.split(",")).map(String::trim).filter(v -> !v.isBlank() && !v.contains("*")).toList());
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));

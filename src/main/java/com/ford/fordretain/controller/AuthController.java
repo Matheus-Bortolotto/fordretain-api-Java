@@ -33,16 +33,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Login", description = "Autentica o usuário e retorna um token JWT com expiração de 24h")
+    @Operation(summary = "Login", description = "Autentica o usuário e retorna um token JWT com expiração configurada")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO request) {
         String email = UsuarioService.normalizeEmail(request.getEmail());
         Usuario usuario = usuarioService.autenticar(email, request.getSenha());
         if (usuario == null) {
-            log.warn("[SECURITY] Login falhou para email: {}", email);
+            log.warn("[SECURITY] Login rejeitado");
             return ResponseEntity.status(401).body(Map.of("erro", "Credenciais inválidas"));
         }
         String token = jwtService.generateToken(usuario.getEmail(), usuario.getRole());
         return ResponseEntity.ok(LoginResponseDTO.builder().token(token).tipo("Bearer")
-                .email(usuario.getEmail()).nome(usuario.getNome()).role(usuario.getRole()).expiresIn(86400000L).build());
+                .email(usuario.getEmail()).nome(usuario.getNome()).role(usuario.getRole()).expiresIn(jwtService.getExpiration()).build());
     }
 }

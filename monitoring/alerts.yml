@@ -1,0 +1,19 @@
+groups:
+  - name: fordretain
+    rules:
+      - alert: ApiIndisponivel
+        expr: up{job="fordretain"} == 0
+        for: 1m
+        labels: {severity: critical}
+      - alert: AcessoNegado
+        expr: sum(increase(fordretain_security_events_total{event="access_denied"}[5m])) > 20
+        for: 2m
+        labels: {severity: warning}
+      - alert: FalhasAutenticacao
+        expr: sum(increase(fordretain_security_events_total{event="authentication_failed"}[10m])) > 15
+        for: 2m
+        labels: {severity: warning}
+      - alert: ExcessoRequisicoes
+        expr: sum(increase(fordretain_security_events_total{event="rate_limit"}[5m])) > 30
+        for: 2m
+        labels: {severity: warning}

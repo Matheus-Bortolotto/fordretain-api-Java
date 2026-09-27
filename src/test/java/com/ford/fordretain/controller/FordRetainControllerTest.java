@@ -42,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import({SecurityConfig.class, JwtService.class})
 class FordRetainControllerTest {
 
+    @MockBean private com.ford.fordretain.dao.UsuarioDAO usuarioDAO;
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,6 +63,11 @@ class FordRetainControllerTest {
 
     @BeforeEach
     void setUp() {
+        when(usuarioDAO.findByEmail(any())).thenAnswer(inv -> {
+            String email = inv.getArgument(0);
+            String role = email.startsWith("admin") ? "ADMIN" : email.startsWith("gerente") ? "GERENTE" : "ANALISTA";
+            return java.util.Optional.of(com.ford.fordretain.model.Usuario.builder().email(email).role(role).ativo(true).build());
+        });
         tokenGerente = jwtService.generateToken("gerente@ford.com", "GERENTE");
         tokenAnalista = jwtService.generateToken("analista@ford.com", "ANALISTA");
         tokenAdmin = jwtService.generateToken("admin@ford.com", "ADMIN");

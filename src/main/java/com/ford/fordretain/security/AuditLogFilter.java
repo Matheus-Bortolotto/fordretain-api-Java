@@ -1,65 +1,45 @@
 package com.ford.fordretain.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.ContentCachingResponseWrapper;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuditLogFilter extends OncePerRequestFilter {
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain)
-            throws ServletException, IOException {
-
-        ContentCachingResponseWrapper wrappedResponse =
-                new ContentCachingResponseWrapper(response);
-
-        long inicio = System.currentTimeMillis();
-
-        try {
-            chain.doFilter(request, wrappedResponse);
-        } finally {
-            long duracao = System.currentTimeMillis() - inicio;
-
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            // Nunca loga dados sensíveis — apenas método, path, status e usuário
-            String usuario = (auth != null && auth.isAuthenticated())
-                    ? auth.getName()
-                    : "anonimo";
-
-            log.info("[AUDIT] {} | {} {} | status={} | {}ms | ip={}",
-                    LocalDateTime.now(),
-                    request.getMethod(),
-                    request.getRequestURI(),
-                    wrappedResponse.getStatus(),
-                    duracao,
-                    request.getRemoteAddr()
-            );
-
-            // Alerta para eventos suspeitos
-            if (wrappedResponse.getStatus() == 401 || wrappedResponse.getStatus() == 403) {
-                log.warn("[SECURITY] Acesso negado | usuario={} | {} {} | ip={}",
-                        usuario,
-                        request.getMethod(),
-                        request.getRequestURI(),
-                        request.getRemoteAddr()
-                );
+    private final ObjectProvider<MeterRegistry> registries;
+    public AuditLogFilter(ObjectProvider<MeterRegistry> registries) { this.registries = registries; }
+    @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+            FilterChain chain) throws ServletException, IOException {
+        String requestId = UUID.randomUUID().toString();
+        response.setHeader("X-Request-ID", requestId);
+        long start = System.nanoTime();
+        try { chain.doFilter(request, response); }
+        finally {
+            int status = response.getStatus();
+            String event = status == 429 ? "rate_limit" : status == 403 ? "access_denied" :
+                status == 401 ? "authentication_failed" : "request_completed";
+            String path = request.getRequestURI();
+            if (status >= 200 && status < 300) {
+                if (path.equals("/api/v1/auth/login")) event = "login_success";
+                else if (path.equals("/api/v1/auth/register")) event = "user_registered";
+                else if (path.startsWith("/api/v1/admin/") && !request.getMethod().equals("GET"))
+                    event = "admin_change";
             }
-
-            wrappedResponse.copyBodyToResponse();
+            log.atInfo().addKeyValue("event", event).addKeyValue("request_id", requestId)
+                .addKeyValue("method", request.getMethod()).addKeyValue("status", status)
+                .addKeyValue("duration_ms", (System.nanoTime()-start)/1_000_000).log("http_audit");
+            MeterRegistry registry = registries.getIfAvailable();
+            if (registry != null) registry.counter("fordretain.security.events", "event", event).increment();
         }
     }
 }

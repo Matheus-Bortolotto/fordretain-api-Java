@@ -1,0 +1,5 @@
+# Valores exclusivamente de testes ja encerrados; removidos da versao atual.
+# Excecoes por fingerprint, sem ignorar arquivos inteiros ou futuros achados.
+c116cd98f4b5fe39663dcb53a21963ecb184c832:evidencias/maven-verify.log:generic-api-key:68
+c116cd98f4b5fe39663dcb53a21963ecb184c832:evidencias/maven-verify.log:generic-api-key:102
+c116cd98f4b5fe39663dcb53a21963ecb184c832:src/test/java/com/ford/fordretain/security/SecurityRegressionTest.java:generic-api-key:15

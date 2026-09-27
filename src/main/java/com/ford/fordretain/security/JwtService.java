@@ -22,6 +22,8 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
+    public long getExpiration() { return expiration; }
+
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
@@ -49,7 +51,7 @@ public class JwtService {
             Claims claims = getClaims(token);
             return claims.getExpiration().after(new Date());
         } catch (Exception e) {
-            log.warn("Token inválido: {}", e.getMessage());
+            log.warn("Token inválido rejeitado");
             return false;
         }
     }

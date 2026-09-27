@@ -1,0 +1,194 @@
+[
+  {
+    "input": {
+      "idade": 41.0,
+      "regiao": "GO",
+      "canalCompra": "CONCESSIONARIA",
+      "formaPagamento": "VISTA",
+      "modeloVeiculo": "MAVERICK",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.26038342404175674,
+      "ECONOMICO": 0.23164040179494197,
+      "ESQUECIDO": 0.2705214034524093,
+      "FIEL": 0.23745477071089194
+    }
+  },
+  {
+    "input": {
+      "idade": 54.0,
+      "regiao": "RJ",
+      "canalCompra": "ONLINE",
+      "formaPagamento": "VISTA",
+      "modeloVeiculo": "BRONCO",
+      "historicoMarca": "RECOMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.1837718019219691,
+      "ECONOMICO": 0.13987121664113533,
+      "ESQUECIDO": 0.2887738274936323,
+      "FIEL": 0.38758315394326326
+    }
+  },
+  {
+    "input": {
+      "idade": 58.0,
+      "regiao": "BA",
+      "canalCompra": "CONCESSIONARIA",
+      "formaPagamento": "VISTA",
+      "modeloVeiculo": "TERRITORY",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.2095903029958012,
+      "ECONOMICO": 0.2100506001856353,
+      "ESQUECIDO": 0.3199292382598357,
+      "FIEL": 0.26042985855872774
+    }
+  },
+  {
+    "input": {
+      "idade": 36.0,
+      "regiao": "PR",
+      "canalCompra": "ONLINE",
+      "formaPagamento": "CONSORCIO",
+      "modeloVeiculo": "MAVERICK",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.31714423291221633,
+      "ECONOMICO": 0.20448498581502494,
+      "ESQUECIDO": 0.2911866575981033,
+      "FIEL": 0.18718412367465534
+    }
+  },
+  {
+    "input": {
+      "idade": 31.0,
+      "regiao": "PE",
+      "canalCompra": "REVENDEDOR",
+      "formaPagamento": "FINANCIAMENTO",
+      "modeloVeiculo": "MUSTANG",
+      "historicoMarca": "RECOMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.26835043732407493,
+      "ECONOMICO": 0.27380741303521117,
+      "ESQUECIDO": 0.16475106617370114,
+      "FIEL": 0.29309108346701274
+    }
+  },
+  {
+    "input": {
+      "idade": 39.0,
+      "regiao": "PR",
+      "canalCompra": "REVENDEDOR",
+      "formaPagamento": "CONSORCIO",
+      "modeloVeiculo": "MAVERICK",
+      "historicoMarca": "RECOMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.24855008236628084,
+      "ECONOMICO": 0.17213091877092346,
+      "ESQUECIDO": 0.22014367191251524,
+      "FIEL": 0.3591753269502805
+    }
+  },
+  {
+    "input": {
+      "idade": 41.0,
+      "regiao": "RS",
+      "canalCompra": "ONLINE",
+      "formaPagamento": "VISTA",
+      "modeloVeiculo": "MUSTANG",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.3236652567291782,
+      "ECONOMICO": 0.18174495238275615,
+      "ESQUECIDO": 0.3036030886013403,
+      "FIEL": 0.19098670228672532
+    }
+  },
+  {
+    "input": {
+      "idade": 20.0,
+      "regiao": "RS",
+      "canalCompra": "CONCESSIONARIA",
+      "formaPagamento": "VISTA",
+      "modeloVeiculo": "MAVERICK",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.35649227871488753,
+      "ECONOMICO": 0.2317371917848984,
+      "ESQUECIDO": 0.23012701297724175,
+      "FIEL": 0.18164351652297225
+    }
+  },
+  {
+    "input": {
+      "idade": 27.0,
+      "regiao": "BA",
+      "canalCompra": "REVENDEDOR",
+      "formaPagamento": "VISTA",
+      "modeloVeiculo": "BRONCO",
+      "historicoMarca": "RECOMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.33546398531424376,
+      "ECONOMICO": 0.1687007494830716,
+      "ESQUECIDO": 0.19233345390753884,
+      "FIEL": 0.3035018112951459
+    }
+  },
+  {
+    "input": {
+      "idade": 43.0,
+      "regiao": "SP",
+      "canalCompra": "ONLINE",
+      "formaPagamento": "FINANCIAMENTO",
+      "modeloVeiculo": "BRONCO",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.2723925963616321,
+      "ECONOMICO": 0.301365362867178,
+      "ESQUECIDO": 0.2709809162179715,
+      "FIEL": 0.1552611245532185
+    }
+  },
+  {
+    "input": {
+      "idade": 44.0,
+      "regiao": "RJ",
+      "canalCompra": "CONCESSIONARIA",
+      "formaPagamento": "FINANCIAMENTO",
+      "modeloVeiculo": "MAVERICK",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.212683057229214,
+      "ECONOMICO": 0.36944615129778113,
+      "ESQUECIDO": 0.22561914278791578,
+      "FIEL": 0.1922516486850891
+    }
+  },
+  {
+    "input": {
+      "idade": 31.0,
+      "regiao": "RJ",
+      "canalCompra": "ONLINE",
+      "formaPagamento": "FINANCIAMENTO",
+      "modeloVeiculo": "MUSTANG",
+      "historicoMarca": "PRIMEIRA_COMPRA"
+    },
+    "probabilities": {
+      "ABANDONO": 0.3162353493323027,
+      "ECONOMICO": 0.3360465523175136,
+      "ESQUECIDO": 0.20047644245833826,
+      "FIEL": 0.14724165589184543
+    }
+  }
+]

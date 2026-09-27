@@ -1,0 +1,121 @@
+{
+  "tool": "TruffleHog",
+  "timestamp": "2026-09-27T19:07:24.503997+00:00",
+  "scope": "Historico Git completo da branch analisada",
+  "verification": "Desativada; nenhum segredo enviado ao provedor",
+  "exit_code": 183,
+  "findings": [
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "README.md",
+      "commit": "e72872f38c816e92a5d4b918b3e843ed77a2cecd",
+      "line": 356
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": ".env",
+      "commit": "5ce84a17a10e1d9a724f2ef15b79fb1a10ef1c0f",
+      "line": 3
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "5ce84a17a10e1d9a724f2ef15b79fb1a10ef1c0f",
+      "line": 8
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "1adf39c1e808441e7ded565a96ffdc7ee7928145",
+      "line": 8
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "5ce84a17a10e1d9a724f2ef15b79fb1a10ef1c0f",
+      "line": 3
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "925c2eb97cd0f353f4998cfb1c8abc3e0582feac",
+      "line": 4
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "e72872f38c816e92a5d4b918b3e843ed77a2cecd",
+      "line": 8
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "e72872f38c816e92a5d4b918b3e843ed77a2cecd",
+      "line": 3
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "README.md",
+      "commit": "de2f13051a5a566d1fae650de8967644afc8eaed",
+      "line": 241
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "9ac2225d0178760cbbe5ed2852e92e282f62dcbaae7798dd81881020157b82db",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "README.md",
+      "commit": "286f2b897a0803560b363a9974583c86369ec500",
+      "line": 71
+    },
+    {
+      "triage": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+      "false_positive": true,
+      "fingerprint": "720b7d49016cb3b2de5b0373bf5c212c908bf3e337844a6620ab0bd9a6e5a4fe",
+      "detector": "JDBC",
+      "verified": false,
+      "file": "src/main/resources/application.properties",
+      "commit": "286f2b897a0803560b363a9974583c86369ec500",
+      "line": 11
+    }
+  ],
+  "count": 11,
+  "actionable": 0
+}

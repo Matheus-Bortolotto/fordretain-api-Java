@@ -33,6 +33,8 @@ class PredictionServiceTest {
     @Mock
     private PredicaoDAO predicaoDAO;
 
+    @Mock private com.ford.fordretain.service.LocalModel localModel;
+
     @InjectMocks
     private PredictionService predictionService;
 
@@ -40,6 +42,7 @@ class PredictionServiceTest {
 
     @BeforeEach
     void setUp() {
+        lenient().when(localModel.predict(any())).thenReturn(java.util.Map.of("FIEL", new BigDecimal("0.08"), "ABANDONO",new BigDecimal("0.68"),"ESQUECIDO",new BigDecimal("0.15"),"ECONOMICO",new BigDecimal("0.09")));
         request = new ClienteRequestDTO();
         request.setNome("Test User");
         request.setEmail("test@email.com");
@@ -54,7 +57,7 @@ class PredictionServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar perfil ABANDONO para cliente novo via canal online")
+    @DisplayName("Deve retornar perfil ABANDONO quando o modelo seleciona ABANDONO")
     void deveRetornarPerfilAbandonoParaClienteNovoOnline() {
         when(clienteDAO.existsByEmail(any())).thenReturn(false);
 
@@ -102,8 +105,9 @@ class PredictionServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar perfil FIEL para cliente com histórico de recompra")
+    @DisplayName("Deve retornar perfil FIEL quando o modelo seleciona FIEL")
     void deveRetornarPerfilFielParaRecompra() {
+        when(localModel.predict(any())).thenReturn(java.util.Map.of("FIEL",new BigDecimal(".65"),"ABANDONO",new BigDecimal(".08"),"ESQUECIDO",new BigDecimal(".12"),"ECONOMICO",new BigDecimal(".15")));
         request.setHistoricoMarca("RECOMPRA");
         request.setCanalCompra("CONCESSIONARIA");
 
@@ -137,8 +141,9 @@ class PredictionServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar perfil ESQUECIDO para cliente com consórcio")
+    @DisplayName("Deve retornar perfil ESQUECIDO quando o modelo seleciona ESQUECIDO")
     void deveRetornarPerfilEsquecidoParaConsorcio() {
+        when(localModel.predict(any())).thenReturn(java.util.Map.of("FIEL",new BigDecimal(".15"),"ABANDONO",new BigDecimal(".10"),"ESQUECIDO",new BigDecimal(".60"),"ECONOMICO",new BigDecimal(".15")));
         request.setHistoricoMarca("PRIMEIRA_COMPRA");
         request.setCanalCompra("CONCESSIONARIA");
         request.setFormaPagamento("CONSORCIO");
@@ -174,8 +179,9 @@ class PredictionServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar perfil ECONOMICO para cenário padrão")
+    @DisplayName("Deve retornar perfil ECONOMICO quando o modelo seleciona ECONOMICO")
     void deveRetornarPerfilEconomicoParaCenarioPadrao() {
+        when(localModel.predict(any())).thenReturn(java.util.Map.of("FIEL",new BigDecimal(".20"),"ABANDONO",new BigDecimal(".15"),"ESQUECIDO",new BigDecimal(".15"),"ECONOMICO",new BigDecimal(".50")));
         request.setHistoricoMarca("PRIMEIRA_COMPRA");
         request.setCanalCompra("CONCESSIONARIA");
         request.setFormaPagamento("FINANCIAMENTO");

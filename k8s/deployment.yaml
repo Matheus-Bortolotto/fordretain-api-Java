@@ -1,0 +1,43 @@
+# Substitua a imagem pelo digest aprovado antes da aplicação.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fordretain-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: fordretain-api}
+  template:
+    metadata:
+      labels: {app: fordretain-api}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: api
+          image: registry.example.invalid/fordretain:REPLACE_WITH_APPROVED_DIGEST
+          ports: [{containerPort: 8080}]
+          envFrom:
+            - secretRef: {name: fordretain-runtime}
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: '1', memory: 768Mi}
+          readinessProbe:
+            httpGet: {path: /actuator/health, port: 8080}
+            initialDelaySeconds: 20
+          livenessProbe:
+            httpGet: {path: /actuator/health, port: 8080}
+            initialDelaySeconds: 60
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}

@@ -1,88 +1,165 @@
 name: Security Pipeline
-
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-
-  build-and-test:
-    name: Build e Testes
+  build:
     runs-on: ubuntu-latest
-    env:
-      ORACLE_USER: ${{ secrets.ORACLE_USER }}
-      ORACLE_PASSWORD: ${{ secrets.ORACLE_PASSWORD }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
-      CRYPTO_SALT: ${{ secrets.CRYPTO_SALT }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17', cache: maven}
+      - run: mvn -B clean verify
+      - uses: actions/upload-artifact@v4
         with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
-      - name: Compilar e rodar testes (unitários + integração)
-        run: mvn -B clean verify
-
+          name: java-tests-sbom
+          path: |
+            target/fordretain-api-1.0.0.jar
+            target/surefire-reports/
+            target/classes/META-INF/sbom/application.cdx.json
+          if-no-files-found: error
+      - run: test -s target/classes/META-INF/sbom/application.cdx.json
+  mobile:
+    runs-on: ubuntu-latest
+    defaults:
+      run: {working-directory: mobile}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm, cache-dependency-path: mobile/package-lock.json}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+        env: {EXPO_PUBLIC_DEMO_MODE: 'false', EXPO_PUBLIC_API_URL: 'https://localhost.invalid'}
+      - uses: actions/upload-artifact@v4
+        with: {name: mobile-web, path: mobile/dist, if-no-files-found: error}
+  semgrep:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install semgrep==1.178.0
+      - name: Varredura das regras versionadas
+        run: semgrep scan --config security/semgrep.yml --error --strict --metrics off --json --output evidencias/semgrep.json src/main mobile/src mobile/app
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: semgrep, path: evidencias/semgrep.json, if-no-files-found: error}
+  trufflehog:
+    name: Secret Scanning - TruffleHog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Instalar TruffleHog
+        run: |
+          curl -fLsS https://github.com/trufflesecurity/trufflehog/releases/download/v3.97.9/trufflehog_3.97.9_linux_amd64.tar.gz -o /tmp/trufflehog.tgz
+          tar -xzf /tmp/trufflehog.tgz -C /tmp trufflehog
+          sudo install /tmp/trufflehog /usr/local/bin/trufflehog
+      - run: python scripts/scan_secrets.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: trufflehog-sanitized, path: evidencias/trufflehog.json, if-no-files-found: error}
   sast:
-    name: SAST - CodeQL
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
+    permissions: {contents: read, security-events: write}
+    strategy:
+      matrix:
+        language: [java-kotlin, javascript-typescript]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17', cache: maven}
+      - uses: github/codeql-action/init@v4
         with:
-          distribution: temurin
-          java-version: '17'
-          cache: maven
-      - name: Inicializar CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: java
-          build-mode: manual
-      - name: Build manual (Java 17, sem depender de autodetecção)
-        run: mvn -B clean compile -DskipTests
-      - name: Rodar análise SAST
-        uses: github/codeql-action/analyze@v3
-
+          languages: ${{ matrix.language }}
+          build-mode: none
+      - uses: github/codeql-action/analyze@v4
   sca:
-    name: SCA - Dependency Review
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Revisar dependências novas/alteradas
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
-
-  secret-scanning:
-    name: Secret Scanning - Gitleaks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17', cache: maven}
+      - run: mvn -B -DskipTests package
+      - uses: aquasecurity/trivy-action@v0.35.0
         with:
-          fetch-depth: 0
-      - name: Rodar Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          format: json
+          output: sca.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: sca, path: sca.json, if-no-files-found: error}
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  container-security:
-    name: Container Security - Trivy
+  iac:
     runs-on: ubuntu-latest
-    needs: build-and-test
     steps:
       - uses: actions/checkout@v4
-      - name: Build da imagem Docker
-        run: docker build -t fordretain-api:ci .
-      - name: Scan de vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@v0.35.0
+      - uses: aquasecurity/trivy-action@v0.35.0
+        with: {scan-type: config, scan-ref: ., severity: 'HIGH,CRITICAL', exit-code: '1'}
+  container:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t fordretain:ci .
+      - uses: aquasecurity/trivy-action@v0.35.0
+        with: {image-ref: 'fordretain:ci', severity: 'HIGH,CRITICAL', exit-code: '1'}
+  evidence:
+    name: API e dashboard - evidencias reais
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with: {name: java-tests-sbom, path: target}
+      - run: pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - run: python scripts/runtime_evidence.py
+        env: {CAPTURE_DASHBOARD: 'true', SERVER_ADDRESS: '0.0.0.0'}
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          image-ref: fordretain-api:ci
-          severity: CRITICAL,HIGH
-          exit-code: '0'
+          name: runtime-evidence
+          path: |
+            evidencias/http-tests.json
+            evidencias/audit.jsonl
+            evidencias/metrics.prom
+            evidencias/prediction.json
+            evidencias/grafana.png
+            evidencias/prometheus.png
+            evidencias/runtime-report.png
+            evidencias/monitoring-checks.json
+          if-no-files-found: error
+      - if: always()
+        run: docker compose -f monitoring/docker-compose.yml down
+        env: {GRAFANA_ADMIN_PASSWORD: 'unused-cleanup-value'}
+  gate:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [build, mobile, semgrep, trufflehog, sast, sca, secrets, iac, container, evidence]
+    steps:
+      - env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: echo "$RESULTS" | jq -e 'all(.[]; .result == "success")'

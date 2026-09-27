@@ -1,0 +1,20 @@
+[
+  {
+    "sha256": "d901b5fba70522e7ff4f03c1678b0c62444bd59ee8bcb8da31ea0c423b57a8ee",
+    "length": 48,
+    "reason": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+    "detector": "JDBC"
+  },
+  {
+    "sha256": "9ac2225d0178760cbbe5ed2852e92e282f62dcbaae7798dd81881020157b82db",
+    "length": 87,
+    "reason": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+    "detector": "JDBC"
+  },
+  {
+    "sha256": "720b7d49016cb3b2de5b0373bf5c212c908bf3e337844a6620ab0bd9a6e5a4fe",
+    "length": 116,
+    "reason": "URL JDBC sem usuario ou senha; host e opcoes de conexao nao sao credenciais.",
+    "detector": "JDBC"
+  }
+]
