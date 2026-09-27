@@ -27,6 +27,32 @@ jobs:
       - name: Compilar e rodar testes (unitários + integração)
         run: mvn -B clean verify
 
+  semgrep:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Instalar Semgrep
+        run: python -m pip install --upgrade semgrep
+      - name: Rodar Semgrep
+        run: semgrep scan --config auto --error .
+
+  trufflehog:
+    name: Secret Scanning - TruffleHog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rodar TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          extra_args: --only-verified
+
   sast:
     name: SAST - CodeQL
     runs-on: ubuntu-latest
