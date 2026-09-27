@@ -19,6 +19,8 @@
 
     <properties>
         <java.version>17</java.version>
+        <!-- CVEs identificados pelo Trivy: corrigidos em Tomcat 10.1.60. -->
+        <tomcat.version>10.1.60</tomcat.version>
         <lombok.version>1.18.38</lombok.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
