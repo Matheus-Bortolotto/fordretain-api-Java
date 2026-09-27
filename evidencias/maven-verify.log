@@ -65,7 +65,7 @@
 2026-09-27T10:02:27.928-04:00  INFO 64 --- [           main] c.f.f.controller.AuthControllerTest      : No active profile set, falling back to 1 default profile: "default"
 2026-09-27T10:02:39.509-04:00  WARN 64 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 0e9c957d-2554-4fd4-91d5-bbace0a96534
+Using generated security password: [REMOVIDO - ambiente de teste encerrado]
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
@@ -99,7 +99,7 @@ This generated password is for development use only. Your security configuration
 2026-09-27T10:02:40.056-04:00  INFO 64 --- [           main] c.f.f.c.FordRetainControllerTest         : No active profile set, falling back to 1 default profile: "default"
 2026-09-27T10:02:40.204-04:00  WARN 64 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: d85228a5-032e-4542-a002-88bd5bc70e29
+Using generated security password: [REMOVIDO - ambiente de teste encerrado]
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 

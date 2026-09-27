@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 class SecurityRegressionTest {
     private JwtService jwt() {
         JwtService j = new JwtService();
-        ReflectionTestUtils.setField(j,"secret","test-key-123456789012345678901234567890123456789012345678901234567890");
+        ReflectionTestUtils.setField(j,"secret",java.util.Base64.getEncoder().encodeToString(io.jsonwebtoken.Jwts.SIG.HS512.key().build().getEncoded()));
         ReflectionTestUtils.setField(j,"expiration",3600000L); return j;
     }
     @Test void desativarContaRejeitaTokenAnterior() throws Exception {
