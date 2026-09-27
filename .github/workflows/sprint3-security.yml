@@ -1,0 +1,65 @@
+name: Sprint 3 - Semgrep e TruffleHog
+
+on:
+  push:
+    branches: [ sprint3-cyber-final ]
+  workflow_dispatch:
+
+jobs:
+  semgrep:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Instalar Semgrep
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install semgrep
+
+      - name: Executar varredura Semgrep
+        run: |
+          semgrep scan --config=auto --json --output=semgrep-results.json .
+          python - <<'PY'
+          import json
+          with open("semgrep-results.json", encoding="utf-8") as f:
+              data = json.load(f)
+          results = data.get("results", [])
+          print(f"Semgrep concluído: {len(results)} achado(s).")
+          for item in results[:20]:
+              print(item.get("check_id"), "-", item.get("path"), "linha", item.get("start", {}).get("line"))
+          PY
+
+      - name: Publicar resultado Semgrep
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-results
+          path: semgrep-results.json
+
+  trufflehog:
+    name: Secret Scanning - TruffleHog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Executar TruffleHog no repositório
+        run: |
+          docker run --rm -v "$PWD:/repo" trufflesecurity/trufflehog:latest             filesystem /repo             --results=verified,unknown             --json             --no-update > trufflehog-results.json
+          if [ -s trufflehog-results.json ]; then
+            echo "TruffleHog encontrou possíveis segredos; revisar o artefato."
+            wc -l trufflehog-results.json
+          else
+            echo "TruffleHog concluído: nenhum segredo verified/unknown encontrado."
+          fi
+
+      - name: Publicar resultado TruffleHog
+        uses: actions/upload-artifact@v4
+        with:
+          name: trufflehog-results
+          path: trufflehog-results.json
