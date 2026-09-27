@@ -36,7 +36,7 @@ public class CryptoUtils {
     private SecretKeySpec deriveKey() {
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            PBEKeySpec spec = new PBEKeySpec(secret.toCharArray(), salt.getBytes(), PBKDF2_ITERATIONS, KEY_LENGTH);
+            PBEKeySpec spec = new PBEKeySpec(secret.toCharArray(), salt.getBytes(java.nio.charset.StandardCharsets.UTF_8), PBKDF2_ITERATIONS, KEY_LENGTH);
             byte[] keyBytes = factory.generateSecret(spec).getEncoded();
             return new SecretKeySpec(keyBytes, "AES");
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class CryptoUtils {
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.ENCRYPT_MODE, deriveKey(), new GCMParameterSpec(GCM_TAG_LENGTH, iv));
-            byte[] ciphertext = cipher.doFinal(data.getBytes());
+            byte[] ciphertext = cipher.doFinal(data.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 
             ByteBuffer buffer = ByteBuffer.allocate(iv.length + ciphertext.length);
             buffer.put(iv).put(ciphertext);
@@ -68,17 +68,7 @@ public class CryptoUtils {
         }
     }
 
-    /**
-     * Tolerante a dados legados: linhas gravadas ANTES desta correção (ex.: o
-     * seed de V2__insert_sample_data.sql) têm telefone em texto puro, sem
-     * criptografia. Se a descriptografia falhar (Base64 inválido ou falha de
-     * autenticação do GCM), assume-se que o valor é legado e é devolvido como
-     * está, em vez de quebrar a requisição com 500.
-     *
-     * Isso é uma medida de transição, não o estado final desejado — o ideal é
-     * rodar uma migração de dados que re-grave os valores legados já
-     * criptografados. Documentado no relatório de segurança para o time de Cyber.
-     */
+    /** Rejeita ciphertext inválido; dados legados devem ser migrados explicitamente. */
     public String decrypt(String encrypted) {
         if (encrypted == null) return null;
         try {
@@ -92,10 +82,9 @@ public class CryptoUtils {
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, deriveKey(), new GCMParameterSpec(GCM_TAG_LENGTH, iv));
-            return new String(cipher.doFinal(ciphertext));
+            return new String(cipher.doFinal(ciphertext), java.nio.charset.StandardCharsets.UTF_8);
         } catch (Exception e) {
-            log.warn("Valor não criptografado (dado legado) ou corrompido — retornando como está");
-            return encrypted;
+            throw new IllegalStateException("Falha de integridade do dado cifrado", e);
         }
     }
 

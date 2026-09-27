@@ -1,0 +1,79 @@
+{
+  "environment": "local H2; não Oracle",
+  "base": "1a63684",
+  "timestamp": "2026-09-27T14:02:48Z",
+  "tests": [
+    {
+      "test": "Login ADMIN local",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Health",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Sem token",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "test": "Cadastro ANALISTA",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Login ANALISTA",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "RBAC ANALISTA",
+      "status": 403,
+      "expected": 403,
+      "pass": true
+    },
+    {
+      "test": "Predição IA persistida",
+      "status": 201,
+      "expected": 201,
+      "pass": true
+    },
+    {
+      "test": "Dashboard ADMIN",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Métricas sem token",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "test": "Métricas com identidade própria",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "test": "Token de métricas não autoriza API",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "test": "Rate limit login",
+      "status": 429,
+      "expected": 429,
+      "pass": true
+    }
+  ]
+}

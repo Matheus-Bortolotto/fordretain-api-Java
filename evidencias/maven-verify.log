@@ -1,0 +1,193 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.ford:fordretain-api >-----------------------
+[INFO] Building FordRetain API 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ fordretain-api ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] Copying 7 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ fordretain-api ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 46 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ fordretain-api ---
+[INFO] Copying 3 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ fordretain-api ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 6 source files with javac [debug parameters release 17] to target/test-classes
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[35,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[35,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[35,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[35,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[35,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/AuthControllerTest.java:[42,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[45,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[45,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[45,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[45,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[45,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/controller/FordRetainControllerTest.java:[55,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[INFO] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/security/ModelParityTest.java: /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/security/ModelParityTest.java uses unchecked or unsafe operations.
+[INFO] /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/src/test/java/com/ford/fordretain/security/ModelParityTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ fordretain-api ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.ford.fordretain.controller.AuthControllerTest
+10:02:27.435 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.ford.fordretain.controller.AuthControllerTest]: AuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+10:02:27.588 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.ford.fordretain.FordRetainApplication for test class com.ford.fordretain.controller.AuthControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-09-27T10:02:27.926-04:00  INFO 64 --- [           main] c.f.f.controller.AuthControllerTest      : Starting AuthControllerTest using Java 17.0.20 with PID 64 (started by root in /workspace/scratch/1686ca93d18b/work/fordretain-corrigido)
+2026-09-27T10:02:27.928-04:00  INFO 64 --- [           main] c.f.f.controller.AuthControllerTest      : No active profile set, falling back to 1 default profile: "default"
+2026-09-27T10:02:39.509-04:00  WARN 64 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 0e9c957d-2554-4fd4-91d5-bbace0a96534
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-27T10:02:39.513-04:00  INFO 64 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-27T10:02:39.684-04:00  INFO 64 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-09-27T10:02:39.685-04:00  INFO 64 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-09-27T10:02:39.686-04:00  INFO 64 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-09-27T10:02:39.703-04:00  INFO 64 --- [           main] c.f.f.controller.AuthControllerTest      : Started AuthControllerTest in 12.066 seconds (process running for 12.818)
+2026-09-27T10:02:39.881-04:00  WARN 64 --- [           main] c.f.f.controller.AuthController          : [SECURITY] Login rejeitado
+2026-09-27T10:02:39.895-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:39.931-04:00  WARN 64 --- [           main] c.f.f.controller.AuthController          : [SECURITY] Login rejeitado
+2026-09-27T10:02:39.932-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:39.988-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.003-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Validação falhou: {senha=Senha é obrigatória}
+2026-09-27T10:02:40.010-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.70 s -- in com.ford.fordretain.controller.AuthControllerTest
+[INFO] Running com.ford.fordretain.controller.FordRetainControllerTest
+2026-09-27T10:02:40.033-04:00  INFO 64 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.ford.fordretain.controller.FordRetainControllerTest]: FordRetainControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-27T10:02:40.039-04:00  INFO 64 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.ford.fordretain.FordRetainApplication for test class com.ford.fordretain.controller.FordRetainControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-09-27T10:02:40.056-04:00  INFO 64 --- [           main] c.f.f.c.FordRetainControllerTest         : Starting FordRetainControllerTest using Java 17.0.20 with PID 64 (started by root in /workspace/scratch/1686ca93d18b/work/fordretain-corrigido)
+2026-09-27T10:02:40.056-04:00  INFO 64 --- [           main] c.f.f.c.FordRetainControllerTest         : No active profile set, falling back to 1 default profile: "default"
+2026-09-27T10:02:40.204-04:00  WARN 64 --- [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d85228a5-032e-4542-a002-88bd5bc70e29
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-27T10:02:40.205-04:00  INFO 64 --- [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-27T10:02:40.229-04:00  INFO 64 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-09-27T10:02:40.229-04:00  INFO 64 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-09-27T10:02:40.229-04:00  INFO 64 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-09-27T10:02:40.234-04:00  INFO 64 --- [           main] c.f.f.c.FordRetainControllerTest         : Started FordRetainControllerTest in 0.192 seconds (process running for 13.349)
+2026-09-27T10:02:40.283-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : POST /predict — cliente: joao@email.com
+2026-09-27T10:02:40.292-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.305-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : DELETE /clientes/999
+2026-09-27T10:02:40.307-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Cliente não encontrado: Cliente não encontrado com ID: 999
+2026-09-27T10:02:40.309-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.318-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.342-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : PUT /clientes/999
+2026-09-27T10:02:40.343-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Cliente não encontrado: Cliente não encontrado com ID: 999
+2026-09-27T10:02:40.344-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.353-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Validação falhou: {email=Email inválido}
+2026-09-27T10:02:40.354-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.362-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.368-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : GET /clientes/999
+2026-09-27T10:02:40.369-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Cliente não encontrado: Cliente não encontrado com ID: 999
+2026-09-27T10:02:40.369-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.375-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.380-04:00  WARN 64 --- [           main] c.ford.fordretain.security.JwtService    : Token inválido rejeitado
+2026-09-27T10:02:40.380-04:00  WARN 64 --- [           main] c.f.fordretain.security.JwtAuthFilter    : Token inválido rejeitado
+2026-09-27T10:02:40.381-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.388-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Validação falhou: {idade=Idade mínima é 18}
+2026-09-27T10:02:40.389-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.394-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.400-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : GET /dashboard
+2026-09-27T10:02:40.407-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.413-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.418-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.424-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : DELETE /clientes/1
+2026-09-27T10:02:40.425-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.434-04:00  WARN 64 --- [           main] c.f.f.exception.GlobalExceptionHandler   : Validação falhou: {idade=Idade mínima é 18}
+2026-09-27T10:02:40.435-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.444-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : PUT /clientes/1
+2026-09-27T10:02:40.448-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.456-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+2026-09-27T10:02:40.463-04:00  INFO 64 --- [           main] c.f.f.controller.FordRetainController    : GET /clientes/1
+2026-09-27T10:02:40.463-04:00  INFO 64 --- [           main] c.f.fordretain.security.AuditLogFilter   : http_audit
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.433 s -- in com.ford.fordretain.controller.FordRetainControllerTest
+[INFO] Running com.ford.fordretain.PredictionServiceTest
+2026-09-27T10:02:40.501-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : Iniciando predição
+2026-09-27T10:02:40.501-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : inference_completed
+2026-09-27T10:02:40.533-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : Iniciando predição
+2026-09-27T10:02:40.534-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : inference_completed
+2026-09-27T10:02:40.535-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : Iniciando predição
+2026-09-27T10:02:40.536-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : inference_completed
+2026-09-27T10:02:40.541-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : Iniciando predição
+2026-09-27T10:02:40.544-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : Iniciando predição
+2026-09-27T10:02:40.544-04:00  INFO 64 --- [           main] c.f.f.service.PredictionService          : inference_completed
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.076 s -- in com.ford.fordretain.PredictionServiceTest
+[INFO] Running com.ford.fordretain.security.ModelParityTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.021 s -- in com.ford.fordretain.security.ModelParityTest
+[INFO] Running com.ford.fordretain.security.JwtServiceTest
+2026-09-27T10:02:40.584-04:00  WARN 64 --- [           main] c.ford.fordretain.security.JwtService    : Token inválido rejeitado
+2026-09-27T10:02:40.586-04:00  WARN 64 --- [           main] c.ford.fordretain.security.JwtService    : Token inválido rejeitado
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.021 s -- in com.ford.fordretain.security.JwtServiceTest
+[INFO] Running com.ford.fordretain.security.SecurityRegressionTest
+2026-09-27T10:02:40.723-04:00  WARN 64 --- [           main] c.ford.fordretain.security.JwtService    : Token inválido rejeitado
+2026-09-27T10:02:40.723-04:00  WARN 64 --- [           main] c.f.fordretain.security.JwtAuthFilter    : Token inválido rejeitado
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.137 s -- in com.ford.fordretain.security.SecurityRegressionTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 40, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ fordretain-api ---
+[INFO] Building jar: /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/target/fordretain-api-1.0.0.jar
+[INFO] 
+[INFO] --- spring-boot:3.5.16:repackage (repackage) @ fordretain-api ---
+[INFO] Replacing main artifact /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/target/fordretain-api-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/target/fordretain-api-1.0.0.jar.original
+[INFO] 
+[INFO] --- cyclonedx:2.9.1:makeAggregateBom (default) @ fordretain-api ---
+[INFO] CycloneDX: Resolving Dependencies
+[INFO] CycloneDX: Creating BOM version 1.6 with 85 component(s)
+[INFO] CycloneDX: Writing and validating BOM (JSON): /workspace/scratch/1686ca93d18b/work/fordretain-corrigido/target/classes/META-INF/sbom/application.cdx.json
+[WARNING] Unknown keyword meta:enum - you should define your own Meta Schema. If the keyword is irrelevant for validation, just use a NonValidationKeyword or if it should generate annotations AnnotationKeyword
+[WARNING] Unknown keyword deprecated - you should define your own Meta Schema. If the keyword is irrelevant for validation, just use a NonValidationKeyword or if it should generate annotations AnnotationKeyword
+[INFO]            attaching as fordretain-api-1.0.0-cyclonedx.json
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  20.501 s
+[INFO] Finished at: 2026-09-27T10:02:44-04:00
+[INFO] ------------------------------------------------------------------------

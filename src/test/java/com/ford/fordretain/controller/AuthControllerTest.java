@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 @Import({SecurityConfig.class, JwtService.class})
 class AuthControllerTest {
 
+    @MockBean private com.ford.fordretain.dao.UsuarioDAO usuarioDAO;
     @Autowired
     private MockMvc mockMvc;
 

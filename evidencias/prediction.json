@@ -1,0 +1,14 @@
+{
+  "predicaoId": 1,
+  "clienteId": 1,
+  "perfilPrevisto": "ECONOMICO",
+  "probabilidades": {
+    "ABANDONO": 0.32537698615966976,
+    "ECONOMICO": 0.3370207953745517,
+    "ESQUECIDO": 0.19447753479759364,
+    "FIEL": 0.14312468366818495
+  },
+  "scoreRisco": 16,
+  "acaoSugerida": "Enviar cupom de desconto de 20% na pr\u00f3xima revis\u00e3o agendada.",
+  "dataPredicao": "2026-09-27T10:02:48.551"
+}

@@ -28,9 +28,11 @@ public class PredictionService {
 
     private final ClienteDAO clienteDAO;
     private final PredicaoDAO predicaoDAO;
+    private final LocalModel localModel;
 
+    @org.springframework.transaction.annotation.Transactional
     public PredicaoResponseDTO predict(ClienteRequestDTO request) {
-        log.info("Iniciando predição para o cliente: {}", request.getEmail());
+        log.info("Iniciando predição");
 
         if (clienteDAO.existsByEmail(request.getEmail())) {
             throw new ClienteJaCadastradoException(request.getEmail());
@@ -49,7 +51,12 @@ public class PredictionService {
                 .historicoMarca(request.getHistoricoMarca())
                 .build());
 
-        Map<String, BigDecimal> probs = mockPredict(request);
+        Map<String, Object> features = new HashMap<>();
+        features.put("idade", request.getIdade()); features.put("regiao", request.getRegiao());
+        features.put("canalCompra", request.getCanalCompra()); features.put("formaPagamento", request.getFormaPagamento());
+        features.put("modeloVeiculo", request.getModeloVeiculo()); features.put("historicoMarca", request.getHistoricoMarca());
+        Map<String, BigDecimal> probs = localModel.predict(features);
+        log.atInfo().addKeyValue("model_version",localModel.version()).log("inference_completed");
         String perfil = perfilMaisProvavel(probs);
         int scoreRisco = calcularScoreRisco(perfil, probs);
         String acao = sugerirAcao(perfil);
@@ -189,34 +196,6 @@ public class PredictionService {
                             .build();
                 })
                 .collect(Collectors.toList());
-    }
-
-    private Map<String, BigDecimal> mockPredict(ClienteRequestDTO req) {
-        Map<String, BigDecimal> probs = new LinkedHashMap<>();
-
-        if ("PRIMEIRA_COMPRA".equals(req.getHistoricoMarca()) && "ONLINE".equals(req.getCanalCompra())) {
-            probs.put("FIEL", new BigDecimal("0.0800"));
-            probs.put("ABANDONO", new BigDecimal("0.6800"));
-            probs.put("ESQUECIDO", new BigDecimal("0.1500"));
-            probs.put("ECONOMICO", new BigDecimal("0.0900"));
-        } else if ("RECOMPRA".equals(req.getHistoricoMarca())) {
-            probs.put("FIEL", new BigDecimal("0.6500"));
-            probs.put("ABANDONO", new BigDecimal("0.0800"));
-            probs.put("ESQUECIDO", new BigDecimal("0.1200"));
-            probs.put("ECONOMICO", new BigDecimal("0.1500"));
-        } else if ("CONSORCIO".equals(req.getFormaPagamento())) {
-            probs.put("FIEL", new BigDecimal("0.1500"));
-            probs.put("ABANDONO", new BigDecimal("0.1000"));
-            probs.put("ESQUECIDO", new BigDecimal("0.6000"));
-            probs.put("ECONOMICO", new BigDecimal("0.1500"));
-        } else {
-            probs.put("FIEL", new BigDecimal("0.2000"));
-            probs.put("ABANDONO", new BigDecimal("0.1500"));
-            probs.put("ESQUECIDO", new BigDecimal("0.1500"));
-            probs.put("ECONOMICO", new BigDecimal("0.5000"));
-        }
-
-        return probs;
     }
 
     private String perfilMaisProvavel(Map<String, BigDecimal> probs) {

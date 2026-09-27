@@ -1,3 +1,5 @@
+> Revisão de segurança: consulte [README_CORRECOES.md](README_CORRECOES.md) para alterações, evidências e implantação. A documentação anterior abaixo descreve a base de origem.
+
 # FordRetain API
 
 > **Ford FIAP Challenge 2026 — Desafio 02**  

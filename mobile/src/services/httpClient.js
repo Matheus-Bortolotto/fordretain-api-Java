@@ -1,8 +1,9 @@
+import { getApiUrl } from '../config/apiUrl';
 import { clearSession, getStoredToken } from './authService';
 import { DEMO_MODE } from '../config/runtime';
 import { mockApiRequest } from './mockApi';
 
-const API_URL = (process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8080').replace(/\/$/, '');
+
 
 export class ApiError extends Error {
   constructor(message, status, details) { super(message); this.name = 'ApiError'; this.status = status; this.details = details; }
@@ -20,7 +21,7 @@ export async function apiRequest(path, options = {}) {
   const token = await getStoredToken();
   let response;
   try {
-    response = await fetch(`${API_URL}${path}`, { ...options, headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers } });
+    response = await fetch(`${getApiUrl()}${path}`, { ...options, headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers } });
   } catch (error) { throw new ApiError('Não foi possível conectar à API FordRetain.', 0, error?.message); }
   if (response.status === 401) await clearSession();
   const body = await parseResponse(response);

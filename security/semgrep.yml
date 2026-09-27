@@ -1,0 +1,42 @@
+rules:
+  - id: fordretain-weak-cipher
+    languages: [java]
+    severity: ERROR
+    message: Use AES-GCM com IV aleatorio; DES, ECB e CBC sem autenticacao nao sao aceitos.
+    patterns:
+      - pattern: Cipher.getInstance($ALG)
+      - metavariable-regex:
+          metavariable: $ALG
+          regex: '.*(DES|ECB|CBC).*'
+  - id: fordretain-sql-concatenation
+    languages: [java]
+    severity: ERROR
+    message: Use PreparedStatement e parametros vinculados.
+    pattern-either:
+      - pattern: $C.prepareStatement($A + $B, ...)
+      - pattern: $S.executeQuery($A + $B)
+      - pattern: $S.executeUpdate($A + $B)
+  - id: fordretain-runtime-command
+    languages: [java]
+    severity: ERROR
+    message: Nao execute comandos do sistema com entradas da aplicacao.
+    pattern: Runtime.getRuntime().exec(...)
+  - id: fordretain-javascript-eval
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Nao executar codigo dinamico por eval.
+    pattern: eval(...)
+  - id: fordretain-token-asyncstorage
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Tokens devem usar SecureStore no dispositivo.
+    patterns:
+      - pattern: AsyncStorage.setItem($KEY, $VALUE)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: '(?i).*token.*'
+  - id: fordretain-tls-validation-disabled
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: A verificacao TLS nao pode ser desativada.
+    pattern: '{rejectUnauthorized: false}'
