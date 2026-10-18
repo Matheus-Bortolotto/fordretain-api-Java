@@ -7,7 +7,7 @@ RUN mvn -B clean package -DskipTests
 
 # Runtime stage — imagem mínima (só JRE, sem Maven/JDK/shell desnecessário),
 # reduz superfície de ataque e tamanho da imagem.
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 # Nunca roda a aplicação como root dentro do container.
 RUN addgroup -S spring && adduser -S spring -G spring
